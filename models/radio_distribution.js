@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 'nextval(radio_distribution_id_seq::regclass)',
+      primaryKey: true,
+      autoIncrement: true,
       unique: true
     },
     user_id: {
@@ -57,6 +58,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'radio_distribution'
+    tableName: 'radio_distribution',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'updated',
+    freezeTableName: true
   });
 };

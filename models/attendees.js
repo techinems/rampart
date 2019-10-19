@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('attendees', {
     user_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false,
       references: {
         model: 'users',
@@ -12,6 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     event_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false,
       references: {
         model: 'events',
@@ -37,8 +39,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     created: {
       type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+      allowNull: false
     },
     updated_by: {
       type: DataTypes.INTEGER,
@@ -53,6 +54,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'attendees'
+    tableName: 'attendees',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'updated',
+    freezeTableName: true
   });
 };

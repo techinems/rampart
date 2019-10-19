@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('promo_request_votes', {
     user_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false,
       references: {
         model: 'users',
@@ -13,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     promo_request_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false,
       references: {
         model: 'promo_requests',
@@ -52,6 +54,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'promo_request_votes'
+    tableName: 'promo_request_votes',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'updated',
+    freezeTableName: true
   });
 };

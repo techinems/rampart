@@ -2,10 +2,10 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('equipment', {
-    id: {
-      type: DataTypes.INTEGER,
+    rpia_control_number: {
+      type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: 'nextval(equipment_id_seq::regclass)',
+      primaryKey: true,
       unique: true
     },
     brand: {
@@ -19,10 +19,6 @@ module.exports = function(sequelize, DataTypes) {
     serial: {
       type: DataTypes.TEXT,
       allowNull: true
-    },
-    rpia_control_number: {
-      type: DataTypes.TEXT,
-      allowNull: false
     },
     created_by: {
       type: DataTypes.INTEGER,
@@ -50,6 +46,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'equipment'
+    tableName: 'equipment',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'updated',
+    freezeTableName: true
   });
 };

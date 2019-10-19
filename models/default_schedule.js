@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
     day: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       unique: true
     },
     cc: {
@@ -49,8 +50,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     created: {
       type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+      allowNull: false
     },
     updated_by: {
       type: DataTypes.INTEGER,
@@ -65,6 +65,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'default_schedule'
+    tableName: 'default_schedule',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'updated',
+    freezeTableName: true
   });
 };

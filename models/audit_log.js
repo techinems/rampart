@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 'nextval(audit_log_id_seq::regclass)',
+      primaryKey: true,
+      autoIncrement: true,
       unique: true
     },
     user_id: {
@@ -18,11 +19,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     timestamp: {
       type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+      allowNull: false
     },
     ip_address: {
-      type: "CIDR",
+      type: DataTypes.CIDR,
       allowNull: false
     },
     table_modified: {
@@ -34,6 +34,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'audit_log'
+    tableName: 'audit_log',
+    timestamps: true,
+    createdAt: 'timestamp',
+    updatedAt: false,
+    freezeTableName: true
   });
 };

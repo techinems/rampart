@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 'nextval(users_ems_certs_id_seq::regclass)',
+      primaryKey: true,
+      autoIncrement: true,
       unique: true
     },
     user_id: {
@@ -57,6 +58,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'users_ems_certs'
+    tableName: 'users_ems_certs',
+    timestamps: true,
+    createdAt: 'created',
+    updatedAt: 'updated',
+    freezeTableName: true
   });
 };
