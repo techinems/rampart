@@ -5,7 +5,7 @@ CREATE TABLE "users_positions"
  "start_date"  date NOT NULL,
  "end_date"    date NULL,
  "created_by"  int NOT NULL,
- "created"     timestamp NOT NULL,
+ "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"  int NULL,
  "updated"     timestamp NULL,
  CONSTRAINT "Ind_581" UNIQUE ( "user_id", "position_id" ),
@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_52" ON "users_positions"
 (
  "user_id"
 );
+
+CREATE TRIGGER "users_positions_autoset_update_col" BEFORE UPDATE
+ON "users_positions" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

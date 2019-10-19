@@ -1,3 +1,7 @@
+-- Functions & procedures
+\i schema/functions/autoset_timestamp_cols.sql
+
+-- Tables
 \i schema/users.sql
 \i schema/positions.sql
 \i schema/other_certs.sql

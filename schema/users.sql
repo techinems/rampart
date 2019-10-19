@@ -24,7 +24,7 @@ CREATE TABLE "users"
  "g_id"           text NULL,
  "slack_id"       text NULL,
  "created_by"     int NOT NULL,
- "created"        timestamp NOT NULL,
+ "created"        timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"     int NULL,
  "updated"        timestamp NULL,
  CONSTRAINT "Ind_573id" UNIQUE ( "id" ),
@@ -46,3 +46,7 @@ CREATE INDEX "fkIdx_387" ON "users"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "users_autoset_timestamp_cols" BEFORE UPDATE
+ON "users" FOR EACH ROW EXECUTE PROCEDURE
+autoset_timestamp_cols();

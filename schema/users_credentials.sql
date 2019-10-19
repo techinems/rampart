@@ -39,3 +39,7 @@ CREATE INDEX "fkIdx_91" ON "users_credentials"
 (
  "user_id"
 );
+
+CREATE TRIGGER "users_credentials_autoset_update_col" BEFORE UPDATE
+ON "users_credentials" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

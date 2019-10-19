@@ -10,7 +10,7 @@ CREATE TABLE "events"
  "gcal_event_id" text NULL,
  "hidden"        boolean NOT NULL,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL,
+ "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_592" UNIQUE ( "id" ),
@@ -32,3 +32,7 @@ CREATE INDEX "fkIdx_441" ON "events"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "events_autoset_update_col" BEFORE UPDATE
+ON "events" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

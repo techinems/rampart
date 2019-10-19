@@ -6,7 +6,7 @@ CREATE TABLE "event_logs"
  "timestamp"  timestamp NOT NULL,
  "text"       text NOT NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_593" UNIQUE ( "id" ),
@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_98" ON "event_logs"
 (
  "event_id"
 );
+
+CREATE TRIGGER "event_logs_autoset_update_col" BEFORE UPDATE
+ON "event_logs" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

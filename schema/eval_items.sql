@@ -6,7 +6,7 @@ CREATE TABLE "eval_items"
  "grading_type"  int NOT NULL,
  "active"        boolean NOT NULL,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL,
+ "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_588" UNIQUE ( "id" ),
@@ -34,3 +34,7 @@ CREATE INDEX "fkIdx_546" ON "eval_items"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "eval_items_autoset_update_col" BEFORE UPDATE
+ON "eval_items" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

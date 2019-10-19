@@ -6,7 +6,7 @@ CREATE TABLE "default_schedule"
  "att1"       int NOT NULL,
  "att2"       int NOT NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_579" UNIQUE ( "day" ),
@@ -52,3 +52,7 @@ CREATE INDEX "fkIdx_407" ON "default_schedule"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "default_schedule_autoset_update_col" BEFORE UPDATE
+ON "default_schedule" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

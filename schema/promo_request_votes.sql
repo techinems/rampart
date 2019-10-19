@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_530" ON "promo_request_votes"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "promo_request_votes_autoset_update_col" BEFORE UPDATE
+ON "promo_request_votes" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

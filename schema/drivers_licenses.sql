@@ -8,7 +8,7 @@ CREATE TABLE "drivers_licenses"
  "expiration"    date NOT NULL,
  "scan_filepath" text NULL,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL,
+ "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_594" UNIQUE ( "id" ),
@@ -36,3 +36,7 @@ CREATE INDEX "fkIdx_490" ON "drivers_licenses"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "drivers_licenses_autoset_update_col" BEFORE UPDATE
+ON "drivers_licenses" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

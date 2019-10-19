@@ -2,7 +2,7 @@ CREATE TABLE "audit_log"
 (
  "id"             serial NOT NULL,
  "user_id"        int NOT NULL,
- "timestamp"      timestamp NOT NULL,
+ "timestamp"      timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "ip_address"     cidr NOT NULL,
  "table_modified" text NOT NULL,
  "text"           text NOT NULL,

@@ -7,7 +7,7 @@ CREATE TABLE "fuel_log"
  "miles"      decimal NOT NULL,
  "fuel"       decimal NOT NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_577" UNIQUE ( "id" ),
@@ -35,3 +35,7 @@ CREATE INDEX "fkIdx_395" ON "fuel_log"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "fuel_log_autoset_update_col" BEFORE UPDATE
+ON "fuel_log" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

@@ -41,3 +41,7 @@ CREATE INDEX "fkIdx_522" ON "promo_requests"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "promo_requests_autoset_update_col" BEFORE UPDATE
+ON "promo_requests" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

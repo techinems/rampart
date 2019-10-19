@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_415" ON "users_ems_certs"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "users_ems_certs_autoset_update_col" BEFORE UPDATE
+ON "users_ems_certs" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

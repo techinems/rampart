@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_424" ON "users_other_certs"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "users_other_certs_autoset_update_col" BEFORE UPDATE
+ON "users_other_certs" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

@@ -6,7 +6,7 @@ CREATE TABLE "equipment"
  "serial"              text NULL,
  "rpia_control_number" text NOT NULL,
  "created_by"          int NOT NULL,
- "created"             timestamp NOT NULL,
+ "created"             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"          int NULL,
  "updated"             timestamp NULL,
  CONSTRAINT "Ind_574" UNIQUE ( "id" ),
@@ -28,3 +28,7 @@ CREATE INDEX "fkIdx_349" ON "equipment"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "equipment_autoset_update_col" BEFORE UPDATE
+ON "equipment" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

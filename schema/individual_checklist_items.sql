@@ -5,9 +5,9 @@ CREATE TABLE "individual_checklist_items"
  "user_id"       int NOT NULL,
  "name"          text NOT NULL,
  "trainer"       int NOT NULL,
- "timestamp"     timestamp NOT NULL,
+ "timestamp"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL,
+ "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_582" UNIQUE ( "id" ),
@@ -47,3 +47,7 @@ CREATE INDEX "fkIdx_481" ON "individual_checklist_items"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "individual_checklist_items_autoset_update_col" BEFORE UPDATE
+ON "individual_checklist_items" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

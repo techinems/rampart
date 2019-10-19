@@ -4,7 +4,7 @@ CREATE TABLE "other_certs"
  "name"       text NOT NULL,
  "org"        text NOT NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_595" UNIQUE ( "id" ),
@@ -26,3 +26,7 @@ CREATE INDEX "fkIdx_498" ON "other_certs"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "other_certs_autoset_update_col" BEFORE UPDATE
+ON "other_certs" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

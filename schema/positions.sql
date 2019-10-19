@@ -27,3 +27,7 @@ CREATE INDEX "fkIdx_371" ON "positions"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "positions_autoset_update_col" BEFORE UPDATE
+ON "positions" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

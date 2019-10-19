@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_513" ON "users_eval_items"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "users_eval_items_autoset_update_col" BEFORE UPDATE
+ON "users_eval_items" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

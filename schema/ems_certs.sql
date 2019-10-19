@@ -4,7 +4,7 @@ CREATE TABLE "ems_certs"
  "name"       text NOT NULL,
  "abbr"       text NOT NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_597" UNIQUE ( "id" ),
@@ -26,3 +26,7 @@ CREATE INDEX "fkIdx_506" ON "ems_certs"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "ems_certs_autoset_update_col" BEFORE UPDATE
+ON "ems_certs" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

@@ -40,3 +40,7 @@ CREATE INDEX "fkIdx_363" ON "radio_distribution"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "radio_distribution_autoset_update_col" BEFORE UPDATE
+ON "radio_distribution" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

@@ -6,7 +6,7 @@ CREATE TABLE "night_crews"
  "att1"       int NOT NULL,
  "att2"       int NOT NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_578" UNIQUE ( "date" ),
@@ -52,3 +52,7 @@ CREATE INDEX "fkIdx_550" ON "night_crews"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "night_crews_autoset_update_col" BEFORE UPDATE
+ON "night_crews" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

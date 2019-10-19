@@ -5,7 +5,7 @@ CREATE TABLE "checklist_items"
  "text"          text NOT NULL,
  "active"        boolean NOT NULL,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL,
+ "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_583" UNIQUE ( "id" ),
@@ -33,3 +33,7 @@ CREATE INDEX "fkIdx_473" ON "checklist_items"
 (
  "updated_by"
 );
+
+CREATE TRIGGER "checklist_items_autoset_update_col" BEFORE UPDATE
+ON "checklist_items" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();

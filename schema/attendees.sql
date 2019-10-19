@@ -4,7 +4,7 @@ CREATE TABLE "attendees"
  "event_id"   int NOT NULL,
  "position"   int NULL,
  "created_by" int NOT NULL,
- "created"    timestamp NOT NULL,
+ "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
  "updated"    timestamp NULL,
  CONSTRAINT "Ind_591" UNIQUE ( "event_id", "user_id" ),
@@ -45,3 +45,7 @@ CREATE INDEX "fkIdx_82" ON "attendees"
 (
  "position"
 );
+
+CREATE TRIGGER "attendees_autoset_update_col" BEFORE UPDATE
+ON "attendees" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();
