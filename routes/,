@@ -1,0 +1,14 @@
+INSERT INTO users (id, first_name, last_name, nine_hundred, dob, email, home_street, 
+home_city, home_state, home_zip, phone, rcs_id, rin, admin, last_login, active,
+access_revoked, g_id, slack_id, created_by)
+VALUES
+(
+    'Dan', 'Bruce', 987, '1994-04-05', 'dan@ddbruce.com', '30 Jillson Circle', 'Milford', 'MA', '01757',
+    5086885830, 'bruced', 660962359, 1, '10/19/2019', 1, 0, 'jlkaj2jeqalkdj132',
+    '<@8sa9ad1>', 0
+),
+(
+    'Justin', 'Etzine', NULL, '1996-06-19', 'justetz@gmail.com', '1635 Cherry Grove Drive', 'San Jose', 'CA',
+    '95125', 6122222222, 'etzinj', 660123456, 0, '10/18/2019', 1, 0, '1u34jkl1j21jkaa',
+    '<@ia9anqh1>', 1
+);
