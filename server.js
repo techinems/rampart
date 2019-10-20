@@ -4,6 +4,7 @@ const logger = require('morgan');
 const Sequelize = require('sequelize');
 const dotenv = require('dotenv');
 
+const { importModels } = require('./models');
 const users = require('./routes/users');
 
 const PORT = process.env.PORT || 3000;
@@ -28,7 +29,7 @@ const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.D
     }
 );
 
-db.import('./models/users.js');
+importModels(db);
 
 db.authenticate().then(() => db.sync().then(() => {
     console.log(`Database connected at ${DB_HOST}:${DB_PORT}`);
