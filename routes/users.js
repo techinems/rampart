@@ -6,7 +6,6 @@ module.exports = db => {
     router.get('/', async (req, res) => res.json(await db.model('users').findAll()));
 
     router.get('/:userId', async (req, res) => {
-        console.log(req.params.userId);
         res.json(await db.model('users').findOne({ where: { id: req.params.userId }}));
     });
 
