@@ -9,20 +9,12 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       unique: true
     },
-    equipment_id: {
-      type: DataTypes.INTEGER,
+    rpia_control_number: {
+      type: DataTypes.TEXT,
       allowNull: false,
       references: {
         model: 'equipment',
-        key: 'id'
-      }
-    },
-    radio_coordinator: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id'
+        key: 'rpia_control_number'
       }
     },
     location: {

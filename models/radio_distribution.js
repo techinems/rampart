@@ -9,19 +9,19 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       unique: true
     },
+    rpia_control_number: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      references: {
+        model: 'equipment',
+        key: 'rpia_control_number'
+      }
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
-        key: 'id'
-      }
-    },
-    equipment_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'equipment',
         key: 'id'
       }
     },
