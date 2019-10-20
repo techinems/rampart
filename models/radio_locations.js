@@ -21,6 +21,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false
         },
+        mdc_id: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         created_by: {
             type: DataTypes.INTEGER,
             allowNull: false,
