@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const Sequelize = require('sequelize');
 const dotenv = require('dotenv');
+dotenv.config();
 
 const { importModels } = require('./models');
 const users = require('./routes/users');
@@ -13,7 +14,6 @@ const DB_PORT = process.env.DB_PORT || 5432;
 const DB_DIALECT = process.env.DB_DIALECT || 'postgres';
 const DB_POOL_MAX = parseInt(process.env.DB_POOL_MAX) || 20;
 
-dotenv.config();
 
 const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS,
     {
