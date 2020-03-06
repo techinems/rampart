@@ -7,7 +7,7 @@ CREATE TABLE "users_credentials"
  "created"       timestamp NOT NULL,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
- CONSTRAINT "Ind_585" UNIQUE ( "credential_id" ),
+ CONSTRAINT "Ind_585" UNIQUE ("user_id", "credential_id" ),
  CONSTRAINT "FK_453" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_457" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_86" FOREIGN KEY ( "credential_id" ) REFERENCES "credentials" ( "id" ),
