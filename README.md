@@ -30,3 +30,7 @@ INSERT INTO users (id, first_name, last_name, password, dob, email, phone, admin
 
 
 ```
+
+
+## Developmen Referen
+[Sequalize](https://sequelize.org/v5/manual/models-usage.html)
