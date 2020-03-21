@@ -43,5 +43,9 @@ db.authenticate().then(() => db.sync().then(() => {
 
     server.use('/users', users(db));
 
+    server.get('/', function (req, res) {
+        res.send('hello world')
+    })
+
     server.listen(PORT, () => console.log(`Rampart is live on port ${PORT}!`));
 })).catch(err => console.error('Unable to connect to database:', err));

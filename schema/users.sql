@@ -3,6 +3,7 @@ CREATE TABLE "users"
  "id"             serial NOT NULL,
  "first_name"     text NOT NULL,
  "last_name"      text NOT NULL,
+ "password"       text NOT NULL,
  "nine_hundred"   int NULL,
  "dob"            date NOT NULL,
  "email"          text NOT NULL,
