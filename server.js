@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const Sequelize = require('sequelize');
 const dotenv = require('dotenv');
+const cors = require('cors')
 dotenv.config();
 
 const { importModels } = require('./models');
@@ -36,10 +37,12 @@ db.authenticate().then(() => db.sync().then(() => {
 
     const server = express();
 
+
     server.use(logger(process.env.MORGAN_LOGGER_LEVEL || 'dev'));
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
     server.use(cookieParser());
+    server.use(cors());
 
     server.use('/users', users(db));
 
