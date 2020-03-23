@@ -8,6 +8,7 @@ dotenv.config();
 
 const { importModels } = require('./models');
 const users = require('./routes/users');
+const credentials = require('./routes/credentials');
 
 const PORT = process.env.PORT || 3000;
 const DB_HOST = process.env.DB_HOST || 'localhost';
@@ -45,6 +46,7 @@ db.authenticate().then(() => db.sync().then(() => {
     server.use(cors());
 
     server.use('/users', users(db));
+    server.use('/credentials', credentials(db));
 
     server.get('/', function (req, res) {
         res.send('hello world')
