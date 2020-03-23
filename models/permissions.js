@@ -1,34 +1,23 @@
-/* jshint indent: 2 */
-
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('users_credentials', {
-        user_id: {
+    return sequelize.define('permissions', {
+        id: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
             allowNull: false,
-            references: {
-                model: 'users',
-                key: 'id'
-            },
-            unique: 'user_credential_index'
-        },
-        credential_id: {
-            type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false,
-            references: {
-                model: 'credentials',
-                key: 'id'
-            },
-            unique: 'user_credential_index'
+            autoIncrement: true,
+            unique: true
         },
-        active: {
-            type: DataTypes.BOOLEAN,
+        name: {
+            type: DataTypes.TEXT,
             allowNull: false
         },
-        date_promoted: {
-            type: DataTypes.DATEONLY,
-            allowNull: false
+        abbr: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: true
         },
         created_by: {
             type: DataTypes.INTEGER,
@@ -55,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         }
     }, {
-        tableName: 'users_credentials',
+        tableName: 'permissions',
         timestamps: true,
         createdAt: 'created',
         updatedAt: 'updated',

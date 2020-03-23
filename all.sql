@@ -29,3 +29,5 @@
 \i /home/schema/users_eval_items.sql
 \i /home/schema/users_checklist_items.sql
 \i /home/schema/promo_request_votes.sql
+\i /home/schema/users_permissions.sql
+\i /home/schema/permissions.sql

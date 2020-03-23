@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('users_credentials', {
+    return sequelize.define('users_permissions', {
         user_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -10,24 +10,20 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'users',
                 key: 'id'
             },
-            unique: 'user_credential_index'
+            unique: 'user_permission_index'
         },
         credential_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             references: {
-                model: 'credentials',
+                model: 'permissions',
                 key: 'id'
             },
-            unique: 'user_credential_index'
+            unique: 'user_permission_index'
         },
         active: {
             type: DataTypes.BOOLEAN,
-            allowNull: false
-        },
-        date_promoted: {
-            type: DataTypes.DATEONLY,
             allowNull: false
         },
         created_by: {
@@ -55,7 +51,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         }
     }, {
-        tableName: 'users_credentials',
+        tableName: 'users_permissions',
         timestamps: true,
         createdAt: 'created',
         updatedAt: 'updated',

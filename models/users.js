@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.TEXT,
             allowNull: false
-        },        
+        },
         nine_hundred: {
             type: DataTypes.INTEGER,
             allowNull: true
@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.TEXT,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         home_street: {
             type: DataTypes.TEXT,

@@ -2,7 +2,7 @@ CREATE TABLE "users_credentials"
 (
  "user_id"       int NOT NULL,
  "credential_id" int NOT NULL,
- "active" boolean not NULL;
+ "active"        boolean not NULL;
  "date_promoted" date NOT NULL,
  "created_by"    int NOT NULL,
  "created"       timestamp NOT NULL,
