@@ -1,16 +1,17 @@
 CREATE TABLE "users_checklist_items"
 (
+ "id"                serial NOT NULL,
  "user_id"           int NOT NULL,
  "checklist_item_id" int NOT NULL,
+ "active"            boolean NOT NULL;
  "trainer"           int NOT NULL,
- "timestamp"         timestamp NOT NULL,
  "created_by"        int NOT NULL,
  "created"           timestamp NOT NULL,
  "updated_by"        int NULL,
  "updated"           timestamp NULL,
- CONSTRAINT "Ind_584" UNIQUE ( "user_id", "checklist_item_id" ),
- CONSTRAINT "FK_234" FOREIGN KEY ( "checklist_item_id" ) REFERENCES "checklist_items" ( "id" ),
+ CONSTRAINT "Ind_584" UNIQUE ( "user_id", "checklist_item_id"),
  CONSTRAINT "FK_238" FOREIGN KEY ( "user_id" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_238c" FOREIGN KEY ( "checklist_item_id" ) REFERENCES "checklists_items" ( "id" ),
  CONSTRAINT "FK_241" FOREIGN KEY ( "trainer" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_461" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_465" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )

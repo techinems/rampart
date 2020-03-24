@@ -11,7 +11,7 @@ module.exports = db => {
     });
 
     // User Login
-    router.post('/session', async(req, res) =>{
+    router.post('/sessions', async(req, res) =>{
         console.log("-----> Request body : ",req.body);
         email = req.body['email']
         password = req.body['password']
