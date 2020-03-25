@@ -6,7 +6,7 @@ module.exports = db => {
     const router = express.Router();
 
     const credentialModel = db.model('credentials');
-    const checklistItemModel = db.model('checklists_items')
+    const checklistItemModel = db.model('checklist_items')
 
 
     // Get all credentials
