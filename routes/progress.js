@@ -15,18 +15,33 @@ module.exports = db => {
     router.post('/', async (req, res) =>{
 
         await checklistItemModel.findAll({
-            where: {credential_id: req.body.credentialId
+            where: {credential_id: req.body.credentialId,
+                    active: false
             }}).then(result => {result.forEach(checklist => {
-                userChecklistItemModel.create(
-                    {'user_id': req.body.userId,
-                    'checklist_item_id': checklist.id,
-                    'active': false,
-                    'trainer': req.body.trainer,
-                    'created_by': req.body.created_by}
-                )
+                userChecklistItemModel.findOne({where:{
+                    'user_id': req.body.userId,
+                    'checklist_item_id': checklist.id
+                }}).then(result => {
+                    if (!result){
+                        userChecklistItemModel.create(
+                            {'user_id': req.body.userId,
+                            'checklist_item_id': checklist.id,
+                            'active': false,
+                            'trainer': req.body.trainer,
+                            'created_by': req.body.created_by}
+                        )
+                    }
+                })
             })
         })
     });
+
+    // Update users_checklist_items
+    router.put('/:userId&checklistItemId', async (req, res) => {
+        await checklistItemModel.update(req.body,
+            {where: {user_id: req.params.userId,
+                    checklist_item_id: req.params.checklistItemId}})
+    })
 
     //Get Detailed Progress of a Route
     async function getDetailedProgressOfARoute(user_id, credential_id){
@@ -38,14 +53,14 @@ module.exports = db => {
         var user_checklists = await userChecklistItemModel.findAll({
                 where:{
                     user_id: user_id            }
-            }).then(result => map(r => r.checklist_item_id))
+            }).then(result => result.map(r => r.checklist_item_id))
 
         var finished_user_checklists = await userChecklistItemModel.findAll({
             where:{
                 user_id: user_id,
                 active: true
             }
-        }).then(result => map(r => r.checklist_item_id))
+        }).then(result => result.map(r => r.checklist_item_id))
 
         checklist_items.forEach(res => {
             res['finished'] = finished_user_checklists.includes(res.id)
@@ -91,7 +106,7 @@ module.exports = db => {
 
     router.get('status/:userId&:credentialId', async (req, res) => {
 
-        const is_complete = userCredentialModel.findOne({
+        const is_complete = await userCredentialModel.findOne({
             where: {user_id: userId,
                     credential_id: credential_id}
         }).then(r => r.length)
@@ -102,12 +117,12 @@ module.exports = db => {
         const checklist_items = getDetailedProgressOfARoute(req.params.userId,
                                                             req.params.credentialId)
 
-        const checklist_starts = checklist_items.map(r => r.started)
-        const checklist_finishes = checklist_items.map(r => r.finished)
+        const checklist_starts_num = checklist_items.map(r => r.started).reduce(
+                                                                (a, b) => a + b, 0)
+        const checklist_finishes_num = checklist_items.map(r => r.finished).reduce(
+                                                                (a, b) => a + b, 0)
 
-        checklist_starts_num = checklist_starts.reduce((a, b) => a + b, 0)
-        checklist_finishes_num = checklist_finishes.reduce((a, b) => a + b, 0)
-        checklist_num = checklist_finishes.length
+        checklist_num = checklist_items.length
 
         status = {'isAvailable': is_available,
                   'isStarted': checklist_starts_num == checklist_num,
@@ -115,5 +130,6 @@ module.exports = db => {
                   'isCompleted': is_complete}
         res.send(status);
     })
+
     return router;
 };

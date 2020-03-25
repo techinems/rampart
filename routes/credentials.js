@@ -17,7 +17,7 @@ module.exports = db => {
         var user_own_credential = await sequelize.query("\
                                         SELECT name, credential_id \
                                         FROM \
-                                            credential \
+                                            credentials \
                                         JOIN \
                                             users_credentials \
                                         ON credentials.id = users_credentials.crendential_id \
@@ -77,10 +77,9 @@ module.exports = db => {
     );
 
     // post to create a credential
-
     router.post('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
-        credentialModel.create({
+        await credentialModel.create({
             'name': req.body['name'],
             'abbr': req.body['abbr'],
             'major_cred' : req.body['major_cred'],
@@ -101,7 +100,7 @@ module.exports = db => {
 
     router.post('/:credentialId', async (req, res) => {
         console.log("-----> Request body : ", req.body);
-        checklistItemModel.create({
+        await checklistItemModel.create({
             'credential_id': req.params.credentialId,
             'text': req.body['text'],
             'active' : true,
@@ -116,15 +115,12 @@ module.exports = db => {
         });
     });
 
-
     // put to update a credential
-    router.put('/', async (req, res) =>{
+    router.put('/:credentialId', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
-        var data = req.body;
-        await credentialModel.update(
-            data,
+        await credentialModel.update(req.body,
             {
-                where: {id: data['id']}
+                where: {id: req.params.credentialId}
             }
         ).then((result) => {
             res.send({'isSuccess': true,

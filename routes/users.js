@@ -42,7 +42,7 @@ module.exports = db => {
     // post to create a user
     router.post('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
-        userModel.create({
+        await userModel.create({
             'first_name': req.body['first_name'],
             'last_name': req.body['last_name'],
             'password' : req.body['password'],

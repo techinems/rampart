@@ -3,6 +3,7 @@ CREATE TABLE "permissions"
  "id"          serial NOT NULL,
  "name"        text NOT NULL,
  "abbr"        text NULL,
+ "active"      boolean NOT NULL,
  "description" text NOT NULL,
  "created_by"  int NOT NULL,
  "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'users',
                 key: 'id'
             },
-            unique: true
+            unique: 'promotion_vote_id'
         },
         promo_request_id: {
             type: DataTypes.INTEGER,
@@ -19,7 +19,8 @@ module.exports = function(sequelize, DataTypes) {
             references: {
                 model: 'promo_requests',
                 key: 'id'
-            }
+            },
+            unique: 'promotion_vote_id'
         },
         vote: {
             type: DataTypes.BOOLEAN,

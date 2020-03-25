@@ -9,6 +9,9 @@ dotenv.config();
 const { importModels } = require('./models');
 const users = require('./routes/users');
 const credentials = require('./routes/credentials');
+const progress = require('./routes/progress');
+const permissions = require('./routes/permissions');
+const promotions = require('./routes/promotions');
 
 const PORT = process.env.PORT || 3000;
 const DB_HOST = process.env.DB_HOST || 'localhost';
@@ -47,6 +50,9 @@ db.authenticate().then(() => db.sync().then(() => {
 
     server.use('/users', users(db));
     server.use('/credentials', credentials(db));
+    server.use('/permissions', permissions(db));
+    server.use('/progress', progress(db));
+    server.use('/promotions', promotions(db));
 
     server.get('/', function (req, res) {
         res.send('hello world')
