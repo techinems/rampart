@@ -28,26 +28,34 @@ module.exports = db => {
         } else {
             var date = new Date();
             var current_stamp = date.getTime();
-            userModel.update(
+            await userModel.update(
                 {last_login: current_stamp},
                 {
                     where: {id: targetUser.id}
                 }
             )
-            targetUser['isSuccess'] = true;
-            res.send(targetUser)
+            res.send({'isSuccess': true,
+                      'msg': 'Successful login',
+                      'result': targetUser})
         }
     });
 
     // post to create a user
     router.post('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+        const result = await userModel.findOne({where: {email: req.body.email}});
+        if (result){
+            res.send({'isSuccess': false,
+                    'msg':'user exist'})
+            return ;
+        }
+
         await userModel.create({
             'first_name': req.body['first_name'],
             'last_name': req.body['last_name'],
             'password' : req.body['password'],
             'phone' : req.body['phone'],
-            'dob' : Date(req.body['dob']),
+            'dob' : req.body['dob'],
             'email' : req.body['email'],
             'admin' : false,
             'active' : true,
@@ -65,12 +73,12 @@ module.exports = db => {
 
     // put to update a user
     router.put('/', async (req, res) =>{
-        console.log("-----> Request body : ", req.body);
-        var data = req.body;
+        console.log("-----> Request body in update user: ", req.body);
+        const data = req.body;
         await userModel.update(
             data,
             {where:
-                {id: data['id']}}
+                {id: data.id}}
         ).then((result) => {
             res.send({'isSuccess': true,
                     'msg':'user successfully update'})
