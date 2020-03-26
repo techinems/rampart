@@ -1,7 +1,6 @@
 const express = require('express');
 const { QueryTypes } = require('sequelize');
 
-
 module.exports = db => {
     const router = express.Router();
 
@@ -59,9 +58,9 @@ module.exports = db => {
     // put to update a promotion request
     router.put('/:promotionRequestId', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
-        await promoRequestModel.update({
+        await promoRequestModel.update(
             data = req.body,
-            where: {id: req.params.promotionRequestId}
+            {where: {id: req.params.promotionRequestId}
 
         }).then((result) => {
             res.send({'isSuccess': true,
