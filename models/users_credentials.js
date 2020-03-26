@@ -27,8 +27,8 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         date_promoted: {
-            type: DataTypes.DATEONLY,
-            allowNull: false
+            type: DataTypes.DATE,
+            allowNull: true
         },
         created_by: {
             type: DataTypes.INTEGER,

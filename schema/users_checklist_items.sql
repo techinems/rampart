@@ -3,7 +3,7 @@ CREATE TABLE "users_checklist_items"
  "id"                serial NOT NULL,
  "user_id"           int NOT NULL,
  "checklist_item_id" int NOT NULL,
- "active"            boolean NOT NULL;
+ "active"            boolean NOT NULL,
  "trainer"           int NOT NULL,
  "created_by"        int NOT NULL,
  "created"           timestamp NOT NULL,

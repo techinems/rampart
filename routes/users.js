@@ -7,7 +7,11 @@ module.exports = db => {
     router.get('/', async (req, res) => res.json(await userModel.findAll()));
 
     router.get('/:userId', async (req, res) => {
-        res.json(await userModel.findOne({ where: { id: req.params.userId }}));
+        await userModel.findOne({
+                    where: {
+                            id: req.params.userId
+                        }
+        }).then(r => res.send(r));
     });
 
     // User Login
