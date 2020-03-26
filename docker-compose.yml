@@ -21,3 +21,14 @@ services:
     ports:
       - 5432:5432
     
+  my_lab:
+    container_name: my_lab 
+    image: 'jupyter/base-notebook'
+    stdin_open: true
+    tty: true
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    volumes:
+      - ./test:/home/jovyan/work
