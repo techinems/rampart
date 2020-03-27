@@ -15,7 +15,15 @@ module.exports = db => {
     // Get all credentials
     router.get('/', async (req, res) => res.json(await credentialModel.findAll()));
 
-    router.get('/:userId', async(req, res) =>{
+    router.get('/:credentialID', async (req, res) => {
+        await credentialModel.findOne({
+                    where: {
+                            id: req.params.credentialID
+                        }
+        }).then(r => res.send(r));
+    });
+
+    router.get('/user/:userId', async(req, res) =>{
         console.log(" -----> Get user credential");
         var user_own_credential = await db.query("\
                                         SELECT name, credential_id \
@@ -134,7 +142,7 @@ module.exports = db => {
     router.post('/checklistItems/', async (req, res) => {
         console.log("-----> Request body : ", req.body);
         await checklistItemModel.create({
-            'credential_id': req.body.credential_id,
+            'credential_id': req.body['credential_id'],
             'text': req.body['text'],
             'active' : true,
             'created_by': req.body['created_by'],
@@ -151,7 +159,7 @@ module.exports = db => {
     // put to update a credential
     router.put('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
-        const to_update_id = req.body.credential_id
+        const to_update_id = req.body['credential_id']
         delete req.body['credential_id']
         await credentialModel.update(req.body,
             {
