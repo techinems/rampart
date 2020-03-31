@@ -4,7 +4,6 @@ const { QueryTypes } = require('sequelize');
 
 module.exports = db => {
     const router = express.Router();
-
     const permissionModel = db.model('permissions');
 
     // Get all permissions, if keyWord in it.

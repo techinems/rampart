@@ -5,7 +5,7 @@ const { QueryTypes } = require('sequelize');
 module.exports = db => {
     const router = express.Router();
 
-    const checklistItemModel = db.models('checklist_items')
+    const checklistItemModel = db.model('checklist_items')
     const credentialModel = db.model('credentials');
     const userChecklistItemModel = db.model('users_checklist_items');
     const userCredentialModel = db.model('users_credentials')
