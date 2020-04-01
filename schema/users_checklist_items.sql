@@ -5,7 +5,7 @@ CREATE TABLE "users_checklist_items"
  "active"            boolean NOT NULL,
  "trainer"           int NOT NULL,
  "created_by"        int NOT NULL,
- "created"           timestamp NOT NULL,
+ "created"           timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"        int NULL,
  "updated"           timestamp NULL,
  CONSTRAINT "Ind_584" UNIQUE ( "user_id", "checklist_item_id"),

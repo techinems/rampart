@@ -9,7 +9,6 @@ module.exports = db => {
     const credentialModel = db.model('credentials');
     const userChecklistItemModel = db.model('users_checklist_items');
     const userCredentialModel = db.model('users_credentials')
-    //const individualChecklistItems = db.model('individual_checklist_items');
 
     // start a new route
     router.post('/', async (req, res) =>{
@@ -21,14 +20,14 @@ module.exports = db => {
                 userChecklistItemModel.findOne({where:{
                     'user_id': req.body.userId,
                     'checklist_item_id': checklist.id
-                }}).then(result => {
-                    if (!result){
-                        userChecklistItemModel.create(
-                            {'user_id': req.body.userId,
-                            'checklist_item_id': checklist.id,
-                            'active': false,
-                            'trainer': req.body.trainer,
-                            'created_by': req.body.created_by}
+                    }}).then(result => {
+                        if (!result){
+                            userChecklistItemModel.create(
+                                {'user_id': req.body.userId,
+                                'checklist_item_id': checklist.id,
+                                'active': false,
+                                'trainer': req.body.trainer,
+                                'created_by': req.body.created_by}
                         )
                     }
                 })
@@ -37,11 +36,20 @@ module.exports = db => {
     });
 
     // Update users_checklist_items
-    router.put('/:userId&checklistItemId', async (req, res) => {
+    router.put('/', async (req, res) => {
         await checklistItemModel.update(req.body,
-            {where: {user_id: req.params.userId,
-                    checklist_item_id: req.params.checklistItemId}})
-    })
+            {where: {user_id: req.body.userId,
+                    checklist_item_id: req.body.checklistItemId}}
+            ).then((result) => {
+                        res.send({'isSuccess': true,
+                                'msg':'User Checklist Item updated successfully'})}
+            ).catch((result) => {
+                res.send({'isSuccess': false,
+                        'msg':'User Checklist Item is not updated successfully'}
+                        )
+            })
+        }
+    )
 
     //Get Detailed Progress of a Route
     async function getDetailedProgressOfARoute(user_id, credential_id){
@@ -71,9 +79,8 @@ module.exports = db => {
     }
 
     router.get('/:userId&:credentialId', async (req, res) => {
-        var checklist_items = getDetailedProgressOfARoute(req.params.userId,
-                                                          req.params.credentialId)
-        res.send(checklist_items)
+        getDetailedProgressOfARoute(req.params.userId,
+                                    req.params.credentialId).then(r => res.send(r))
     });
 
     // Determine whether route update availability

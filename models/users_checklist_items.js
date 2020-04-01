@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
                 key: 'id'
             }
         },
-        timestamp: {
+        active: {
             type: DataTypes.DATE,
             allowNull: false
         },
