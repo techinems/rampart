@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('promo_request_votes', {
+    return sequelize.define('users_permissions', {
         user_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -10,24 +10,20 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'users',
                 key: 'id'
             },
-            unique: 'promotion_vote_id'
+            unique: 'user_permission_index'
         },
-        promo_request_id: {
+        credential_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             references: {
-                model: 'promo_requests',
+                model: 'permissions',
                 key: 'id'
             },
-            unique: 'promotion_vote_id'
+            unique: 'user_permission_index'
         },
-        vote: {
+        active: {
             type: DataTypes.BOOLEAN,
-            allowNull: true
-        },
-        comments: {
-            type: DataTypes.TEXT,
             allowNull: false
         },
         created_by: {
@@ -55,7 +51,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         }
     }, {
-        tableName: 'promo_request_votes',
+        tableName: 'users_permissions',
         timestamps: true,
         createdAt: 'created',
         updatedAt: 'updated',

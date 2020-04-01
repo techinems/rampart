@@ -15,11 +15,13 @@ module.exports = function(sequelize, DataTypes) {
             references: {
                 model: 'credentials',
                 key: 'id'
-            }
+            },
+            unique: 'checklist_id'
         },
         text: {
             type: DataTypes.TEXT,
-            allowNull: false
+            allowNull: false,
+            unique: 'checklist_id'
         },
         active: {
             type: DataTypes.BOOLEAN,

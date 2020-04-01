@@ -9,7 +9,8 @@ module.exports = function(sequelize, DataTypes) {
             references: {
                 model: 'users',
                 key: 'id'
-            }
+            },
+            unique: 'user_credential_index'
         },
         credential_id: {
             type: DataTypes.INTEGER,
@@ -19,11 +20,15 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'credentials',
                 key: 'id'
             },
-            unique: true
+            unique: 'user_credential_index'
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         },
         date_promoted: {
-            type: DataTypes.DATEONLY,
-            allowNull: false
+            type: DataTypes.DATE,
+            allowNull: true
         },
         created_by: {
             type: DataTypes.INTEGER,

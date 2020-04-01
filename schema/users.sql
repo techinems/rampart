@@ -3,8 +3,8 @@ CREATE TABLE "users"
  "id"             serial NOT NULL,
  "first_name"     text NOT NULL,
  "last_name"      text NOT NULL,
- "password"       text NOT NULL,
  "nine_hundred"   int NULL,
+ "password"      text NOT NULL,
  "dob"            date NOT NULL,
  "email"          text NOT NULL,
  "home_street"    text NULL,
@@ -29,6 +29,7 @@ CREATE TABLE "users"
  "updated_by"     int NULL,
  "updated"        timestamp NULL,
  CONSTRAINT "Ind_573id" UNIQUE ( "id" ),
+ CONSTRAINT "Ind_573email" UNIQUE ( "email" ),
  CONSTRAINT "FK_383" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_387" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
 );

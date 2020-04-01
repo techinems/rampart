@@ -10,6 +10,8 @@ CREATE TABLE "credentials"
  "updated_by"  int NULL,
  "updated"     timestamp NULL,
  CONSTRAINT "Ind_586" UNIQUE ( "id" ),
+ CONSTRAINT "Ind_586name" UNIQUE ( "name" ),
+
  CONSTRAINT "FK_223" FOREIGN KEY ( "parent_cred" ) REFERENCES "credentials" ( "id" ),
  CONSTRAINT "FK_445" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_449" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
@@ -20,10 +22,6 @@ CREATE UNIQUE INDEX "PK_positions" ON "credentials"
  "id"
 );
 
-CREATE INDEX "fkIdx_223" ON "credentials"
-(
- "parent_cred"
-);
 
 CREATE INDEX "fkIdx_445" ON "credentials"
 (
