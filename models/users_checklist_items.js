@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         active: {
-            type: DataTypes.DATE,
+            type: DataTypes.BOOLEAN,
             allowNull: false
         },
         created_by: {

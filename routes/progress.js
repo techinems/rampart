@@ -12,34 +12,45 @@ module.exports = db => {
 
     // start a new route
     router.post('/', async (req, res) =>{
-
-        await checklistItemModel.findAll({
-            where: {credential_id: req.body.credentialId,
-                    active: false
-            }}).then(result => {result.forEach(checklist => {
-                userChecklistItemModel.findOne({where:{
-                    'user_id': req.body.userId,
-                    'checklist_item_id': checklist.id
-                    }}).then(result => {
+        const result = await checklistItemModel.findAll({
+            where: {credential_id: req.body['credential_id'],
+                    active: true
+            }}).then(async result => {
+                result.forEach(async checklist => {
+                await userChecklistItemModel.findOne({
+                    where:{
+                        user_id: req.body['user_id'],
+                        checklist_item_id: checklist.id
+                    }}).then(async result => {
                         if (!result){
-                            userChecklistItemModel.create(
-                                {'user_id': req.body.userId,
+                            await userChecklistItemModel.create(
+                                {'user_id': req.body['user_id'],
                                 'checklist_item_id': checklist.id,
                                 'active': false,
                                 'trainer': req.body.trainer,
-                                'created_by': req.body.created_by}
-                        )
-                    }
+                                'created_by': req.body.created_by})
+                            }
+                    })
                 })
-            })
-        })
+
+            await userCredentialModel.create(
+                {'user_id': req.body['user_id'],
+                'credential_id': req.body['credential_id'],
+                'active': false,
+                'created_by': req.body.created_by})
+        }).then(r => res.send({'isSuccess': true,
+                                'msg': 'Successfully start the route'})
+        ).catch(r => res.send({'isSuccess': false,
+                'msg': 'Fail to start the route'}
+        ))
     });
 
     // Update users_checklist_items
     router.put('/', async (req, res) => {
-        await checklistItemModel.update(req.body,
-            {where: {user_id: req.body.userId,
-                    checklist_item_id: req.body.checklistItemId}}
+        console.log('------>Req Body', req.body)
+        await userChecklistItemModel.update(req.body,
+            {where: {user_id: req.body['user_id'],
+                    checklist_item_id: req.body['checklist_item_id']}}
             ).then((result) => {
                         res.send({'isSuccess': true,
                                 'msg':'User Checklist Item updated successfully'})}
@@ -71,14 +82,15 @@ module.exports = db => {
         }).then(result => result.map(r => r.checklist_item_id))
 
         checklist_items.forEach(res => {
-            res['finished'] = finished_user_checklists.includes(res.id)
-            res['started'] = user_checklists.includes(res.id)
+            res.dataValues['isFinished'] = finished_user_checklists.includes(res.id)
+            res.dataValues['isStarted'] = user_checklists.includes(res.id)
         })
 
         return checklist_items
     }
 
-    router.get('/:userId&:credentialId', async (req, res) => {
+    // Get the status of a START route, include the status of all checklist_items
+    router.get('/start/:userId&:credentialId', async (req, res) => {
         getDetailedProgressOfARoute(req.params.userId,
                                     req.params.credentialId).then(r => res.send(r))
     });
@@ -86,13 +98,12 @@ module.exports = db => {
     // Determine whether route update availability
     async function isPrerequistAvailable(user_id, credential_id){
         var parent_cred = await credentialModel.findOne({
-            where: {credential_id: credential_id}
+            where: {id: credential_id}
         }).then(result =>  result.parent_cred)
 
         var all_user_credentials = await userCredentialModel.findAll({
             where: {user_id: user_id}
-        }).then(result => result.map(item => item.id));
-
+        }).then(result => result.map(item => item.credential_id));
         return all_user_credentials.includes(parent_cred)
     }
 
@@ -100,40 +111,43 @@ module.exports = db => {
 
         const isAvailable = isPrerequistAvailable(req.params.userId,
                                                   req.params.credentialId)
-
-        if (!isAvailable.includes(parent_cred)){
-            res.send({'isAvailable': false, 'msg':
-                     'parent credential doesn\'t exist'})
+        if (!isAvailable){
+            res.send({'isAvailable': false,
+                    'msg': 'parent credential doesn\'t exist'})
         }
         else{
-            res.send({'isAvailable': true, 'msg':
-                     'parent credential exist'})
+            res.send({'isAvailable': true,
+                      'msg': 'parent credential exist'})
         }
     })
 
-    router.get('status/:userId&:credentialId', async (req, res) => {
+    router.get('/:userId&:credentialId', async (req, res) => {
 
         const is_complete = await userCredentialModel.findOne({
-            where: {user_id: userId,
-                    credential_id: credential_id}
-        }).then(r => r.length)
+            where: {user_id: req.params.userId,
+                    credential_id: req.params.credentialId,
+                    active: true}
+        }).then(r => r ? true: false)
 
-        const is_available = isPrerequistAvailable(req.params.userId,
+        console.log('sssssss', is_complete)
+        const is_available = await isPrerequistAvailable(req.params.userId,
                                                    req.params.credentialId)
-
-        const checklist_items = getDetailedProgressOfARoute(req.params.userId,
+        const checklist_items = await getDetailedProgressOfARoute(req.params.userId,
                                                             req.params.credentialId)
 
-        const checklist_starts_num = checklist_items.map(r => r.started).reduce(
-                                                                (a, b) => a + b, 0)
-        const checklist_finishes_num = checklist_items.map(r => r.finished).reduce(
-                                                                (a, b) => a + b, 0)
+        const checklist_starts_num = checklist_items.map(r => r.dataValues.isStarted ? 1: 0).reduce(
+                                                                                    (a, b) => a + b, 0)
+
+        const checklist_finishes_num = checklist_items.map(r => r.dataValues.isFinished ? 1: 0).reduce(
+                                                                                    (a, b) => a + b, 0)
 
         checklist_num = checklist_items.length
 
-        status = {'isAvailable': is_available,
+        status = {'finishedChecklistNum': checklist_finishes_num,
+                  'totalChecklistItemNum': checklist_num,
+                  'isAvailable': is_available,
                   'isStarted': checklist_starts_num == checklist_num,
-                  'isChecklistFinished': checklist_finishes_num == checklist_num,
+                  'isChecklistItemsFinished': checklist_finishes_num == checklist_num,
                   'isCompleted': is_complete}
         res.send(status);
     })
