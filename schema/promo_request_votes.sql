@@ -1,6 +1,5 @@
 CREATE TABLE "promo_request_votes"
-(
- "user_id"          int NOT NULL,
+("user_id"          int NOT NULL,
  "promo_request_id" int NOT NULL,
  "vote"             boolean NULL,
  "comments"         text NOT NULL,
