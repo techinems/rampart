@@ -16,6 +16,6 @@
     "tedious": "^6.4.0"
   },
   "devDependencies": {
-    "eslint": "^6.5.1"
+    "eslint": "^6.8.0"
   }
 }
