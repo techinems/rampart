@@ -103,7 +103,8 @@ module.exports = db => {
         }).then(result =>  result.parent_cred)
 
         var all_user_credentials = await userCredentialModel.findAll({
-            where: {user_id: user_id}
+            where: {user_id: user_id,
+                    active: true}
         }).then(result => result.map(item => item.credential_id));
         return all_user_credentials.includes(parent_cred)
     }

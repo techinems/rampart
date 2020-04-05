@@ -30,7 +30,7 @@ info = {'user_id': 1,
         'checklist_item_id': 6,
         'active': True}
 
-test_update_users_checklist_items(info)
+#test_update_users_checklist_items(info)
 
 
 def test_get_user_route_status():
@@ -59,7 +59,7 @@ def test_get_user_route_status():
     result = requests.get(url)
     pprint.pprint(result.json())
 
-test_get_user_route_status()
+#test_get_user_route_status()
 
 def test_get_user_credential_is_avaiable():
     "{'isAvailable': True, 'msg': 'parent credential exist'}"
@@ -67,7 +67,7 @@ def test_get_user_credential_is_avaiable():
     result =requests.get(url)
     pprint.pprint(result.json())
 
-test_get_user_credential_is_avaiable()
+#test_get_user_credential_is_avaiable()
 
 def test_get_credential_status_from_checklist_item_angle():
     """{'finishedChecklistNum': 1,
@@ -85,7 +85,7 @@ def test_get_credential_status_from_checklist_item_angle():
     result = requests.get(url)
     pprint.pprint(result.json())
 
-test_get_credential_status_from_checklist_item_angle()
+#test_get_credential_status_from_checklist_item_angle()
 
 def test_get_credential_status_from_checklist_item_angle_all():
     """[{'finishedChecklistNum': 1,
@@ -95,7 +95,7 @@ def test_get_credential_status_from_checklist_item_angle_all():
     'isStarted': True,
     'totalChecklistItemNum': 2}]"""
 
-    url = 'http://localhost:3000/progress/all/0'
+    url = 'http://localhost:3000/progress/all/3'
     result = requests.get(url)
     pprint.pprint(result.json())
 
@@ -113,4 +113,4 @@ def test_get_all_credential_status():
     result = requests.get(url)
     pprint.pprint(result.json())
 
-test_get_all_credential_status()
+#test_get_all_credential_status()
