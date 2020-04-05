@@ -6,6 +6,7 @@ module.exports = db => {
     const router = express.Router();
 
     const checklistItemModel = db.model('checklist_items')
+    const userModel = db.model('users')
     const credentialModel = db.model('credentials');
     const userChecklistItemModel = db.model('users_checklist_items');
     const userCredentialModel = db.model('users_credentials')
@@ -121,19 +122,21 @@ module.exports = db => {
         }
     })
 
-    router.get('/:userId&:credentialId', async (req, res) => {
+    async function getUserCredentialStatus(user_id, credential_id){
 
         const is_complete = await userCredentialModel.findOne({
-            where: {user_id: req.params.userId,
-                    credential_id: req.params.credentialId,
+            where: {user_id: user_id,
+                    credential_id: credential_id,
                     active: true}
         }).then(r => r ? true: false)
 
-        console.log('sssssss', is_complete)
-        const is_available = await isPrerequistAvailable(req.params.userId,
-                                                   req.params.credentialId)
-        const checklist_items = await getDetailedProgressOfARoute(req.params.userId,
-                                                            req.params.credentialId)
+        const user_name = await userModel.findOne({where: {id: user_id}})
+        const credential_name = await credentialModel.findOne({where: {id: credential_id}}).then(r => r.name)
+
+        const is_available = await isPrerequistAvailable(user_id,
+            credential_id)
+        const checklist_items = await getDetailedProgressOfARoute(user_id,
+                                                                  credential_id)
 
         const checklist_starts_num = checklist_items.map(r => r.dataValues.isStarted ? 1: 0).reduce(
                                                                                     (a, b) => a + b, 0)
@@ -148,9 +151,46 @@ module.exports = db => {
                   'isAvailable': is_available,
                   'isStarted': checklist_starts_num == checklist_num,
                   'isChecklistItemsFinished': checklist_finishes_num == checklist_num,
-                  'isCompleted': is_complete}
+                  'isCompleted': is_complete,
+                  'checklist_items': checklist_items,
+                  'user_id': user_id,
+                  'last_name': user_name.last_name,
+                  'first_name': user_name.first_name,
+                  'email': user_name.email,
+                  'credential_id': credential_id,
+                  'credential_name': credential_name
+                 }
+
+        return status;
+    }
+    router.get('/:userId&:credentialId', async (req, res) => {
+        const status = await getUserCredentialStatus(req.params.userId,
+                                               req.params.credentialId)
         res.send(status);
     })
+
+    router.get('/all/:userId', async (req, res) => {
+
+        all_status = []
+        const all_credentials = await credentialModel.findAll()
+        for (let cred of all_credentials){
+            status = await getUserCredentialStatus(req.params.userId, cred.id)
+            all_status.push(status)
+        }
+        res.send(all_status)
+    })
+
+    router.get('/all/', async (req, res) => {
+
+        all_status = []
+        const user_credentials = await userCredentialModel.findAll()
+        for (let user_cred of user_credentials){
+            status = await getUserCredentialStatus(user_cred.user_id, user_cred.credential_id)
+            all_status.push(status)
+        }
+        res.send(all_status)
+    })
+
 
     return router;
 };

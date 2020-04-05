@@ -90,7 +90,7 @@ def test_get_permissions(info=None):
 test_get_permissions()
 
 def test_get_user_permissions(info=None):
-    url = 'http://localhost:3000/permissions/user/1'
+    url = 'http://localhost:3000/permissions/all/1'
 
     result = requests.get(url)
     pprint.pprint(result.json())

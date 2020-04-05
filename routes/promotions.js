@@ -7,6 +7,7 @@ module.exports = db => {
     const promoRequestModel = db.model('promo_requests');
     const promoRequestVoteModel = db.model('promo_request_votes');
     const credentialModel = db.model('credentials')
+    const userCredentialModel = db.model('users_credentials');
 
     // Get all promotions
     router.get('/', async (req, res) => res.json(
@@ -69,6 +70,21 @@ module.exports = db => {
     // put to update a promotion request
     router.put('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+
+        if (req.body['approved']){
+            whose_credential = await promoRequestModel.findOne({
+                where: {id: req.body['promo_request_id']}}
+            )
+
+            await userCredentialModel.update({'approved': true,
+                                              'date_promoted': Date(Date.now())},
+                {
+                    where: {user_id: whose_credential.user_id,
+                            credential_id: whose_credential.credential_id}
+                })
+        }
+
+        
         await promoRequestModel.update(
             data = req.body,
             {

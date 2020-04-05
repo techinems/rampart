@@ -86,3 +86,31 @@ def test_get_credential_status_from_checklist_item_angle():
     pprint.pprint(result.json())
 
 test_get_credential_status_from_checklist_item_angle()
+
+def test_get_credential_status_from_checklist_item_angle_all():
+    """[{'finishedChecklistNum': 1,
+    'isAvailable': True,
+    'isChecklistItemsFinished': False,
+    'isCompleted': False,
+    'isStarted': True,
+    'totalChecklistItemNum': 2}]"""
+
+    url = 'http://localhost:3000/progress/all/0'
+    result = requests.get(url)
+    pprint.pprint(result.json())
+
+test_get_credential_status_from_checklist_item_angle_all()
+
+def test_get_all_credential_status():
+    """[{'finishedChecklistNum': 1,
+    'isAvailable': True,
+    'isChecklistItemsFinished': False,
+    'isCompleted': False,
+    'isStarted': True,
+    'totalChecklistItemNum': 2}]"""
+
+    url = 'http://localhost:3000/progress/all/'
+    result = requests.get(url)
+    pprint.pprint(result.json())
+
+test_get_all_credential_status()
