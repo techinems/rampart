@@ -11,9 +11,7 @@ module.exports = db => {
 
     // Get all promotions
     router.get('/', async (req, res) => res.json(
-        await promoRequestModel.findAll({where:
-                                            {active: true}
-                                        })));
+        await promoRequestModel.findAll()));
 
     //Get a Promotion request detail information
     router.get('/:promotionId', async(req, res) =>{
@@ -56,6 +54,7 @@ module.exports = db => {
         await promoRequestModel.create({
             'user_id': req.body['user_id'],
             'credential_id': req.body['credential_id'],
+            'active': true,
             'approved' : false,
             'created_by': req.body['created_by'],
         }).then((result) => {
@@ -84,7 +83,7 @@ module.exports = db => {
                 })
         }
 
-        
+
         await promoRequestModel.update(
             data = req.body,
             {

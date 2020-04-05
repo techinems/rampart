@@ -72,7 +72,7 @@ module.exports = db => {
 
         var user_checklists = await userChecklistItemModel.findAll({
                 where:{
-                    user_id: user_id            }
+                    user_id: user_id}
             }).then(result => result.map(r => r.checklist_item_id))
 
         var finished_user_checklists = await userChecklistItemModel.findAll({
