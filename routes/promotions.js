@@ -75,14 +75,13 @@ module.exports = db => {
                 where: {id: req.body['promo_request_id']}}
             )
 
-            await userCredentialModel.update({'approved': true,
+            await userCredentialModel.update({'active': true,
                                               'date_promoted': Date(Date.now())},
                 {
                     where: {user_id: whose_credential.user_id,
                             credential_id: whose_credential.credential_id}
                 })
         }
-
 
         await promoRequestModel.update(
             data = req.body,
@@ -105,7 +104,7 @@ module.exports = db => {
         await promoRequestVoteModel.create({
                 'user_id': req.body['user_id'],
                 'promo_request_id': req.body['promo_request_id'],
-                'comments' : 'Empty',
+                'comments' : req.body['comment'],
                 'created_by': req.body.created_by,
         }).then((result) => {
             res.send({'isSuccess': true,
