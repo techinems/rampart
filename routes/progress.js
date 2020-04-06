@@ -147,6 +147,24 @@ module.exports = db => {
 
         checklist_num = checklist_items.length
 
+        is_started = (checklist_starts_num == checklist_num)
+        is_checklistItems_finished = checklist_finishes_num == checklist_num
+
+        if (is_complete){
+            label = 'Compeleted'
+        }
+        else if (!is_available){
+            label = 'Not available'
+        }
+        else if (is_started & (!is_checklistItems_finished)){
+            label = 'In Progress'
+        }
+        else if (is_started & is_checklistItems_finished){
+            label = 'started'
+        }
+        else{
+            label = 'Not start'
+        }
         status = {'finishedChecklistNum': checklist_finishes_num,
                   'totalChecklistItemNum': checklist_num,
                   'isAvailable': is_available,
@@ -159,7 +177,8 @@ module.exports = db => {
                   'first_name': user_name.first_name,
                   'email': user_name.email,
                   'credential_id': credential_id,
-                  'credential_name': credential_name
+                  'credential_name': credential_name,
+                  'label': label
                  }
 
         return status;
