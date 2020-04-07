@@ -16,7 +16,6 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'users',
                 key: 'id'
             },
-            unique: 'only_one_promo'
         },
         credential_id: {
             type: DataTypes.INTEGER,
@@ -25,7 +24,6 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'credentials',
                 key: 'id'
             },
-            unique: 'only_one_promo'
         },
         approved: {
             type: DataTypes.BOOLEAN,

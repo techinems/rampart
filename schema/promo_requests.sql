@@ -12,7 +12,6 @@ CREATE TABLE "promo_requests"
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_589" UNIQUE ( "id" ),
- CONSTRAINT "Ind_589a" UNIQUE ( "user_id", "credential_id"),
  CONSTRAINT "FK_250" FOREIGN KEY ( "credential_id" ) REFERENCES "credentials" ( "id" ),
  CONSTRAINT "FK_253" FOREIGN KEY ( "user_id" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_518" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
