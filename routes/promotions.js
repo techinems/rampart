@@ -104,7 +104,8 @@ module.exports = db => {
         await promoRequestVoteModel.create({
                 'user_id': req.body['user_id'],
                 'promo_request_id': req.body['promo_request_id'],
-                'comments' : req.body['comment'],
+                'vote': req.body['vote'],
+                'comments' : req.body['comments'],
                 'created_by': req.body.created_by,
         }).then((result) => {
             res.send({'isSuccess': true,
