@@ -4,7 +4,7 @@ CREATE TABLE "users_permissions"
  "permission_id" int NOT NULL,
  "active"        boolean Not NULL,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "created"       timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_1003" UNIQUE ("user_id", "permission_id" ),

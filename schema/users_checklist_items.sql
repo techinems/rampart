@@ -4,6 +4,7 @@ CREATE TABLE "users_checklist_items"
  "checklist_item_id" int NOT NULL,
  "active"            boolean NOT NULL,
  "trainer"           int NOT NULL,
+ "comments"          text,
  "created_by"        int NOT NULL,
  "created"           timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"        int NULL,

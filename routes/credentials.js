@@ -155,8 +155,7 @@ module.exports = db => {
             'credential_id': req.body['credential_id'],
             'text': req.body['text'],
             'active' : true,
-            'created_by': req.body['created_by'],
-            'updated_by': 0
+            'created_by': req.body['created_by']
         }).then((result) => {
             res.send({'isSuccess': true,
                     'msg':'credential checklist item successfully created'})

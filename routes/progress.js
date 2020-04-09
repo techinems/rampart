@@ -10,6 +10,8 @@ module.exports = db => {
     const credentialModel = db.model('credentials');
     const userChecklistItemModel = db.model('users_checklist_items');
     const userCredentialModel = db.model('users_credentials')
+    const userPermissionModel = db.model('users_permissions')
+    const permissionModel = db.model('permissions')
 
     // start a new route
     router.post('/', async (req, res) =>{
@@ -46,9 +48,28 @@ module.exports = db => {
         ))
     });
 
+    async function isUserPermittedCheckoff(user_id){
+        perm_id = await permissionModel.findOne({
+            where: {'name': 'approve'
+            }
+        }).then(r => r.id)
+
+        is_in = await userPermissionModel.findOne({
+                            where: {'permission_id': perm_id,
+                                    'user_id': user_id
+                        }}).then(r => (r === null) ? false: true)
+        return is_in
+    }
+
+
     // Update users_checklist_items
     router.put('/', async (req, res) => {
         console.log('------>Req Body', req.body)
+        is_in = await isUserPermittedCheckoff(req.body.updated_by)
+        if (!is_in){
+            res.send({'isSuccess': false,
+                    ' msg':'You have no right to checkoff the checklist item'})}
+
         await userChecklistItemModel.update(req.body,
             {where: {user_id: req.body['user_id'],
                     checklist_item_id: req.body['checklist_item_id']}}

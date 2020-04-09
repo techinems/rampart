@@ -99,7 +99,7 @@ def test_get_credential_status_from_checklist_item_angle_all():
     result = requests.get(url)
     pprint.pprint(result.json())
 
-test_get_credential_status_from_checklist_item_angle_all()
+#test_get_credential_status_from_checklist_item_angle_all()
 
 def test_get_all_credential_status():
     """[{'finishedChecklistNum': 1,
@@ -113,4 +113,4 @@ def test_get_all_credential_status():
     result = requests.get(url)
     pprint.pprint(result.json())
 
-#test_get_all_credential_status()
+test_get_all_credential_status()

@@ -36,6 +36,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.BOOLEAN,
             allowNull: false
         },
+        comments: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         created_by: {
             type: DataTypes.INTEGER,
             allowNull: false,

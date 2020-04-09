@@ -7,7 +7,10 @@ module.exports = db => {
     const promoRequestModel = db.model('promo_requests');
     const promoRequestVoteModel = db.model('promo_request_votes');
     const credentialModel = db.model('credentials')
+    const userModel = db.model('users')
     const userCredentialModel = db.model('users_credentials');
+    const permissionModel = db.model('permissions');
+    const userPermissionModel = db.model('users_permissions');
 
     // Get all promotions
     router.get('/', async (req, res) => res.json(
@@ -23,6 +26,12 @@ module.exports = db => {
                                                     {id: promotion_request.credential_id}}
                                                     ).then(r => r.name)
 
+        const user_name = await userModel.findOne({where:
+                                                    {id: promotion_request.user_id}}
+                                                    ).then(r => {
+                                                        return {'last_name': r.last_name,
+                                                        'first_name': r.first_name}})
+
         const votes_results = await promoRequestVoteModel.findAll({
                 where:{
                         promo_request_id: req.params.promotionId
@@ -31,6 +40,16 @@ module.exports = db => {
                                                             'vote': r.vote,
                                                             'user_id': r.user_id}
                                                     }))
+        var details = []
+        for (let res in votes_results){
+            user_name = await userModel.findOne({where:
+                                {id: res.user_id}}
+                                ).then(r => {
+                                        return {'last_name': r.last_name,
+                                                'first_name': r.first_name}})
+            res['userName'] = user_name
+            details.push(res)
+        }
 
         const votes = votes_results.map(r => (r.vote == true)? 1: 0).reduce(
             (a, b) => a + b, 0)
@@ -39,11 +58,12 @@ module.exports = db => {
             (a, b) => a + b, 0)
         const total = votes_results.length;
 
+        promotion_request.dataValues['userName'] = user_name
         promotion_request.dataValues['credentialName'] = credential_name
         promotion_request.dataValues['votes'] = votes
         promotion_request.dataValues['denies'] = denies
         promotion_request.dataValues['total'] = total
-        promotion_request.dataValues['detail'] = votes_results
+        promotion_request.dataValues['detail'] = details
         res.send(promotion_request)
         }
     );
@@ -98,9 +118,29 @@ module.exports = db => {
         });
     });
 
+    async function isUserPermittedVote(user_id){
+        perm_id = await permissionModel.findOne({
+            where: {'name': 'vote'
+            }
+        }).then(r => r.id)
+
+        is_in = await userPermissionModel.findOne({
+                            where: {'permission_id': perm_id,
+                                    'user_id': user_id
+                        }}).then(r => (r === null) ? false: true)
+        return is_in
+    }
+
     // post to create a promotion request vote
     router.post('/vote/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+
+        const is_in = await isUserPermittedVote(req.body['user_id'])
+        console.log('WWWWWWWWWWWWWWWWWWWWWW', is_in)
+        if (!is_in){
+            res.send({'isSuccess': false,
+                    ' msg':'You have no right to vote'})}
+
         await promoRequestVoteModel.create({
                 'user_id': req.body['user_id'],
                 'promo_request_id': req.body['promo_request_id'],
@@ -119,6 +159,12 @@ module.exports = db => {
     // put to update a promotion request vote
     router.put('/vote', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+        const is_in = await isUserPermittedVote(req.body['user_id'])
+        console.log('------->', is_in)
+        if (!is_in){
+            res.send({'isSuccess': false,
+                    ' msg':'You have no right to vote'})}
+
         await promoRequestVoteModel.update({
             'vote': req.body.vote,
             'comments' : req.body.comments,
