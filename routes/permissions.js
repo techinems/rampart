@@ -7,6 +7,8 @@ module.exports = db => {
     const permissionModel = db.model('permissions');
     const userPermissionModel = db.model('users_permissions')
     // Get all permissions, if keyWord in it.
+    router.get('/', async (req, res) => res.json(await permissionModel.findAll()));
+
     router.get('/:keyWord', async (req, res) => {
         await permissionModel.findAll({
             where: {

@@ -139,7 +139,7 @@ module.exports = db => {
         console.log('WWWWWWWWWWWWWWWWWWWWWW', is_in)
         if (!is_in){
             res.send({'isSuccess': false,
-                    ' msg':'You have no right to vote'})}
+                    'msg':'You have no right to vote'})}
 
         await promoRequestVoteModel.create({
                 'user_id': req.body['user_id'],
@@ -163,7 +163,7 @@ module.exports = db => {
         console.log('------->', is_in)
         if (!is_in){
             res.send({'isSuccess': false,
-                    ' msg':'You have no right to vote'})}
+                    'msg':'You have no right to vote'})}
 
         await promoRequestVoteModel.update({
             'vote': req.body.vote,

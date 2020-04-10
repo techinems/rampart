@@ -67,21 +67,25 @@ module.exports = db => {
         console.log('------>Req Body', req.body)
         is_in = await isUserPermittedCheckoff(req.body.updated_by)
         if (!is_in){
-            res.send({'isSuccess': false,
-                    ' msg':'You have no right to checkoff the checklist item'})}
-
-        await userChecklistItemModel.update(req.body,
-            {where: {user_id: req.body['user_id'],
-                    checklist_item_id: req.body['checklist_item_id']}}
-            ).then((result) => {
-                        res.send({'isSuccess': true,
-                                'msg':'User Checklist Item updated successfully'})}
-            ).catch((result) => {
-                res.send({'isSuccess': false,
-                        'msg':'User Checklist Item is not updated successfully'}
-                        )
-            })
+            res.send({
+                'isSuccess': false,
+                'msg':'You have no right to checkoff the checklist item'}
+        )} else {
+            await userChecklistItemModel.update(req.body,
+                {where: {user_id: req.body['user_id'],
+                        checklist_item_id: req.body['checklist_item_id']}}
+                ).then((result) => {
+                            res.send({'isSuccess': true,
+                                    'msg':'User Checklist Item updated successfully'})}
+                ).catch((result) => {
+                    res.send({'isSuccess': false,
+                            'msg':'User Checklist Item is not updated successfully'}
+                            )
+                })
+            }
         }
+
+
     )
 
     //Get Detailed Progress of a Route
