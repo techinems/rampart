@@ -38,16 +38,16 @@ module.exports = db => {
                       }}).then(result => result.map(r => {
                                                     return {'comments': r.comments,
                                                             'vote': r.vote,
-                                                            'user_id': r.user_id}
+                                                            'voterUserId': r.user_id}
                                                     }))
         var details = []
-        for (let res in votes_results){
-            user_name = await userModel.findOne({where:
+        for (let res of votes_results){
+            var user_name_helper = await userModel.findOne({where:
                                 {id: res.user_id}}
                                 ).then(r => {
                                         return {'last_name': r.last_name,
                                                 'first_name': r.first_name}})
-            res['userName'] = user_name
+            res['voterUserName'] = user_name_helper
             details.push(res)
         }
 
@@ -140,11 +140,17 @@ module.exports = db => {
             res.send({'isSuccess': false,
                       'msg':'You have no right to vote'})}
         else{
+            if ('comments' in req.body){
+                comments = req.body['comments'];
+            }
+            else{
+                comments = '';
+            }
             await promoRequestVoteModel.create({
                     'user_id': req.body['user_id'],
                     'promo_request_id': req.body['promo_request_id'],
                     'vote': req.body['vote'],
-                    'comments' : req.body['comments'],
+                    'comments' : comments,
                     'created_by': req.body.created_by,
             }).then((result) => {
                 res.send({'isSuccess': true,
@@ -160,9 +166,7 @@ module.exports = db => {
     router.put('/vote', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
         const is_in = await isUserPermittedVote(req.body['user_id'])
-        console.log('------->', is_in)
         if (!is_in){
-            console.log('---->', false, false, false);
             res.send({'isSuccess': false,
                     'msg':'You have no right to update vote'})}
         else{
