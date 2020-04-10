@@ -43,7 +43,7 @@ module.exports = db => {
         var details = []
         for (let res of votes_results){
             var user_name_helper = await userModel.findOne({where:
-                                {id: res.user_id}}
+                                {id: res.voterUserId}}
                                 ).then(r => {
                                         return {'last_name': r.last_name,
                                                 'first_name': r.first_name}})
