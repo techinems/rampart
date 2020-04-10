@@ -38,16 +38,16 @@ module.exports = db => {
                       }}).then(result => result.map(r => {
                                                     return {'comments': r.comments,
                                                             'vote': r.vote,
-                                                            'user_id': r.user_id}
+                                                            'voterUserId': r.user_id}
                                                     }))
         var details = []
-        for (let res in votes_results){
-            user_name = await userModel.findOne({where:
-                                {id: res.user_id}}
+        for (let res of votes_results){
+            var user_name_helper = await userModel.findOne({where:
+                                {id: res.voterUserId}}
                                 ).then(r => {
                                         return {'last_name': r.last_name,
                                                 'first_name': r.first_name}})
-            res['userName'] = user_name
+            res['voterUserName'] = user_name_helper
             details.push(res)
         }
 
@@ -136,50 +136,56 @@ module.exports = db => {
         console.log("-----> Request body : ", req.body);
 
         const is_in = await isUserPermittedVote(req.body['user_id'])
-        console.log('WWWWWWWWWWWWWWWWWWWWWW', is_in)
         if (!is_in){
             res.send({'isSuccess': false,
-                    'msg':'You have no right to vote'})}
-
-        await promoRequestVoteModel.create({
-                'user_id': req.body['user_id'],
-                'promo_request_id': req.body['promo_request_id'],
-                'vote': req.body['vote'],
-                'comments' : req.body['comments'],
-                'created_by': req.body.created_by,
-        }).then((result) => {
-            res.send({'isSuccess': true,
-                    'msg':'Promotion Request Vote successfully created'})
-        }).catch((result) =>{
-            res.send({'isSuccess': false,
-                    'msg':'Promotion Request Vote is not successfully created'})
-        });
+                      'msg':'You have no right to vote'})}
+        else{
+            if ('comments' in req.body){
+                comments = req.body['comments'];
+            }
+            else{
+                comments = '';
+            }
+            await promoRequestVoteModel.create({
+                    'user_id': req.body['user_id'],
+                    'promo_request_id': req.body['promo_request_id'],
+                    'vote': req.body['vote'],
+                    'comments' : comments,
+                    'created_by': req.body.created_by,
+            }).then((result) => {
+                res.send({'isSuccess': true,
+                        'msg':'Promotion Request Vote successfully created'})
+            }).catch((result) =>{
+                res.send({'isSuccess': false,
+                        'msg':'Promotion Request Vote is not successfully created'})
+            });
+        }
     });
 
     // put to update a promotion request vote
     router.put('/vote', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
         const is_in = await isUserPermittedVote(req.body['user_id'])
-        console.log('------->', is_in)
         if (!is_in){
             res.send({'isSuccess': false,
-                    'msg':'You have no right to vote'})}
-
-        await promoRequestVoteModel.update({
-            'vote': req.body.vote,
-            'comments' : req.body.comments,
-            },
-            {
-                where: {user_id: req.body['user_id'],
-                        promo_request_id: req.body['promo_request_id']}
-            }
-        ).then((result) => {
-            res.send({'isSuccess': true,
-                    'msg':'Promotion Request Vote successfully updated'})
-        }).catch((result) =>{
-            res.send({'isSuccess': false,
-                    'msg':'Promotion Request Vote is not successfully updated'})
-        });
+                    'msg':'You have no right to update vote'})}
+        else{
+            await promoRequestVoteModel.update({
+                'vote': req.body.vote,
+                'comments' : req.body.comments,
+                },
+                {
+                    where: {user_id: req.body['user_id'],
+                            promo_request_id: req.body['promo_request_id']}
+                }
+            ).then((result) => {
+                res.send({'isSuccess': true,
+                        'msg':'Promotion Request Vote successfully updated'})
+            }).catch((result) =>{
+                res.send({'isSuccess': false,
+                        'msg':'Promotion Request Vote is not successfully updated'})
+            });
+        }
     });
 
     return router;

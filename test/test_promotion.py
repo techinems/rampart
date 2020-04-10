@@ -10,7 +10,7 @@ def test_create_promotion_request(info):
 info = {'user_id': 1,
         'credential_id': 1,
         'created_by': 0}
-test_create_promotion_request(info)
+#test_create_promotion_request(info)
 
 def test_update_promotion_request(info):
     url = 'http://localhost:3000/promotions/'
@@ -19,7 +19,7 @@ def test_update_promotion_request(info):
 
 info = {'promo_request_id': 1,
         'active': True}
-test_update_promotion_request(info)
+#test_update_promotion_request(info)
 
 
 def test_create_promotion_request_vote(info):
@@ -27,14 +27,14 @@ def test_create_promotion_request_vote(info):
     result = requests.post(url, info)
     pprint.pprint(result.json())
 
-info = {'promo_request_id': 1,
+info = {'promo_request_id': 2,
         'user_id': 0,
         'created_by': 0}
 test_create_promotion_request_vote(info)
 
 info = {'promo_request_id': 1,
-        'user_id': 1,
-        'created_by': 1}
+        'user_id': 0,
+        'created_by': 0}
 
 test_create_promotion_request_vote(info)
 
@@ -44,14 +44,14 @@ def test_update_promotion_request_vote(info):
     result = requests.put(url, info)
     pprint.pprint(result.json())
 
-info = {'promo_request_id': 1,
+info = {'promo_request_id': 2,
         'user_id': 0,
         'comments': 'After Update',
         'vote': True}
 test_update_promotion_request_vote(info)
 
 info = {'promo_request_id': 1,
-        'user_id': 1,
+        'user_id': 0,
         'comments': 'BBBB',
         'vote': False}
 test_update_promotion_request_vote(info)
@@ -101,6 +101,6 @@ def test_get_promotion_requests_result():
     result = requests.get(url)
     pprint.pprint(result.json())
 
-test_get_promotion_requests_result()
+#test_get_promotion_requests_result()
 
 
