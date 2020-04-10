@@ -30,6 +30,18 @@ INSERT INTO users (id, first_name, last_name, password, dob, email, phone, admin
 INSERT INTO credentials (id, name, abbr, major_cred, parent_cred, created_by)
     VALUES (0, 'Credential_Basic', 'Cred_Basic', TRUE, 0, 0);
 
+INSERT INTO permissions (name, active, description, created_by)
+VALUES ('approve', TRUE, 'approve', 0);
+INSERT INTO permissions (name, active, description, created_by)
+VALUES ('vote', TRUE,'vote', 0);
+
+-- Test User_Permissions
+INSERT INTO users_permissions (user_id, permission_id, active, created_by)
+VALUES (0, 1, TRUE, 0);
+INSERT INTO users_permissions (user_id, permission_id, active, created_by)
+VALUES (0, 2, TRUE, 0);
+
+
 ```
 
 

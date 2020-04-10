@@ -49,9 +49,9 @@ db.authenticate().then(() => db.sync().then(() => {
 
     server.use('/users', users(db));
     server.use('/credentials', credentials(db));
-    //server.use('/permissions', permissions(db));
-    //server.use('/progress', progress(db));
-    //server.use('/promotions', promotions(db));
+    server.use('/permissions', permissions(db));
+    server.use('/progress', progress(db));
+    server.use('/promotions', promotions(db));
 
     server.get('/', function (req, res) {
         res.send('hello world')

@@ -32,9 +32,13 @@ module.exports = function(sequelize, DataTypes) {
                 key: 'id'
             }
         },
-        timestamp: {
-            type: DataTypes.DATE,
+        active: {
+            type: DataTypes.BOOLEAN,
             allowNull: false
+        },
+        comments: {
+            type: DataTypes.TEXT,
+            allowNull: true
         },
         created_by: {
             type: DataTypes.INTEGER,

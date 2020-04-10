@@ -1,11 +1,11 @@
 CREATE TABLE "users_credentials"
-(
+("id"            serial NOT NULL,
  "user_id"       int NOT NULL,
  "credential_id" int NOT NULL,
  "active"        boolean not NULL,
  "date_promoted" timestamp NULL,
  "created_by"    int NOT NULL,
- "created"       timestamp NOT NULL,
+ "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
  CONSTRAINT "Ind_585" UNIQUE ("user_id", "credential_id" ),

@@ -7,9 +7,14 @@ module.exports = db => {
     const promoRequestModel = db.model('promo_requests');
     const promoRequestVoteModel = db.model('promo_request_votes');
     const credentialModel = db.model('credentials')
+    const userModel = db.model('users')
+    const userCredentialModel = db.model('users_credentials');
+    const permissionModel = db.model('permissions');
+    const userPermissionModel = db.model('users_permissions');
 
     // Get all promotions
-    router.get('/', async (req, res) => res.json(await promoRequestModel.findAll()));
+    router.get('/', async (req, res) => res.json(
+        await promoRequestModel.findAll()));
 
     //Get a Promotion request detail information
     router.get('/:promotionId', async(req, res) =>{
@@ -21,19 +26,44 @@ module.exports = db => {
                                                     {id: promotion_request.credential_id}}
                                                     ).then(r => r.name)
 
-        const votes_results = await promoRequestVoteModel.findAll({where: {
-                                                                promotion_id: req.params.promotionId
-                                                                }})
+        const user_name = await userModel.findOne({where:
+                                                    {id: promotion_request.user_id}}
+                                                    ).then(r => {
+                                                        return {'last_name': r.last_name,
+                                                        'first_name': r.first_name}})
 
-        const votes = votes_results.map(cred.vote == true).reduce((a, b) => a + b, 0)
-        const denies = votes_results.map(cred.vote == false).reduce((a, b) => a + b, 0)
+        const votes_results = await promoRequestVoteModel.findAll({
+                where:{
+                        promo_request_id: req.params.promotionId
+                      }}).then(result => result.map(r => {
+                                                    return {'comments': r.comments,
+                                                            'vote': r.vote,
+                                                            'user_id': r.user_id}
+                                                    }))
+        var details = []
+        for (let res in votes_results){
+            user_name = await userModel.findOne({where:
+                                {id: res.user_id}}
+                                ).then(r => {
+                                        return {'last_name': r.last_name,
+                                                'first_name': r.first_name}})
+            res['userName'] = user_name
+            details.push(res)
+        }
+
+        const votes = votes_results.map(r => (r.vote == true)? 1: 0).reduce(
+            (a, b) => a + b, 0)
+        // console.log(votes)
+        const denies = votes_results.map(r => (r.vote == false)? 1: 0).reduce(
+            (a, b) => a + b, 0)
         const total = votes_results.length;
 
-        promotion_request['credentialName'] = credential_name
-        promotion_request['votes'] = votes
-        promotion_request['denies'] = denies
-        promotion_request['total'] = total
-        promotion_request['detail'] = votes_results
+        promotion_request.dataValues['userName'] = user_name
+        promotion_request.dataValues['credentialName'] = credential_name
+        promotion_request.dataValues['votes'] = votes
+        promotion_request.dataValues['denies'] = denies
+        promotion_request.dataValues['total'] = total
+        promotion_request.dataValues['detail'] = details
         res.send(promotion_request)
         }
     );
@@ -42,8 +72,9 @@ module.exports = db => {
     router.post('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
         await promoRequestModel.create({
-            'user_id': req.body.user_id,
-            'credential_id': req.body.credential_id,
+            'user_id': req.body['user_id'],
+            'credential_id': req.body['credential_id'],
+            'active': true,
             'approved' : false,
             'created_by': req.body['created_by'],
         }).then((result) => {
@@ -56,12 +87,28 @@ module.exports = db => {
     });
 
     // put to update a promotion request
-    router.put('/:promotionRequestId', async (req, res) =>{
+    router.put('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+
+        if (req.body['approved']){
+            whose_credential = await promoRequestModel.findOne({
+                where: {id: req.body['promo_request_id']}}
+            )
+
+            await userCredentialModel.update({'active': true,
+                                              'date_promoted': Date(Date.now())},
+                {
+                    where: {user_id: whose_credential.user_id,
+                            credential_id: whose_credential.credential_id}
+                })
+        }
+
         await promoRequestModel.update(
             data = req.body,
-            {where: {id: req.params.promotionRequestId}
-
+            {
+                where: {
+                    id: req.body['promo_request_id']
+                }
         }).then((result) => {
             res.send({'isSuccess': true,
                     'msg':'Promotion Request successfully updated'})
@@ -71,14 +118,35 @@ module.exports = db => {
         });
     });
 
+    async function isUserPermittedVote(user_id){
+        perm_id = await permissionModel.findOne({
+            where: {'name': 'vote'
+            }
+        }).then(r => r.id)
+
+        is_in = await userPermissionModel.findOne({
+                            where: {'permission_id': perm_id,
+                                    'user_id': user_id
+                        }}).then(r => (r === null) ? false: true)
+        return is_in
+    }
+
     // post to create a promotion request vote
     router.post('/vote/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+
+        const is_in = await isUserPermittedVote(req.body['user_id'])
+        console.log('WWWWWWWWWWWWWWWWWWWWWW', is_in)
+        if (!is_in){
+            res.send({'isSuccess': false,
+                    'msg':'You have no right to vote'})}
+
         await promoRequestVoteModel.create({
-            'user_id': req.body.user_id,
-            'promotion_request_id': req.promotion_request_id,
-            'comments' : 'None Comments',
-            'created_by': req.body.created_by,
+                'user_id': req.body['user_id'],
+                'promo_request_id': req.body['promo_request_id'],
+                'vote': req.body['vote'],
+                'comments' : req.body['comments'],
+                'created_by': req.body.created_by,
         }).then((result) => {
             res.send({'isSuccess': true,
                     'msg':'Promotion Request Vote successfully created'})
@@ -89,22 +157,28 @@ module.exports = db => {
     });
 
     // put to update a promotion request vote
-    router.put('/vote/:promotionRequestId&:userId', async (req, res) =>{
+    router.put('/vote', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
+        const is_in = await isUserPermittedVote(req.body['user_id'])
+        console.log('------->', is_in)
+        if (!is_in){
+            res.send({'isSuccess': false,
+                    'msg':'You have no right to vote'})}
+
         await promoRequestVoteModel.update({
             'vote': req.body.vote,
             'comments' : req.body.comments,
             },
             {
-                where: {user_id: req.params.userId,
-                        promotion_request_id: req.params.promotionRequestId}
+                where: {user_id: req.body['user_id'],
+                        promo_request_id: req.body['promo_request_id']}
             }
         ).then((result) => {
             res.send({'isSuccess': true,
-                    'msg':'Promotion Request Vote successfully created'})
+                    'msg':'Promotion Request Vote successfully updated'})
         }).catch((result) =>{
             res.send({'isSuccess': false,
-                    'msg':'Promotion Request Vote is not successfully created'})
+                    'msg':'Promotion Request Vote is not successfully updated'})
         });
     });
 

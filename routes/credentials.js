@@ -16,11 +16,21 @@ module.exports = db => {
     router.get('/', async (req, res) => res.json(await credentialModel.findAll()));
 
     router.get('/:credentialID', async (req, res) => {
-        await credentialModel.findOne({
+
+        result = await credentialModel.findOne({
                     where: {
                             id: req.params.credentialID
                         }
-        }).then(r => res.send(r));
+        }).then(async (r) => {
+            checklist_items = await checklistItemModel.findAll({
+                where:{
+                    credential_id: req.params.credentialID
+                }
+            })
+            r.dataValues['checklist_items'] = checklist_items
+            return r
+        })
+        res.send(result)
     });
 
     router.get('/user/:userId', async(req, res) =>{
@@ -145,8 +155,7 @@ module.exports = db => {
             'credential_id': req.body['credential_id'],
             'text': req.body['text'],
             'active' : true,
-            'created_by': req.body['created_by'],
-            'updated_by': 0
+            'created_by': req.body['created_by']
         }).then((result) => {
             res.send({'isSuccess': true,
                     'msg':'credential checklist item successfully created'})

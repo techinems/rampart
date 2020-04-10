@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
             },
             unique: 'user_permission_index'
         },
-        credential_id: {
+        permission_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
