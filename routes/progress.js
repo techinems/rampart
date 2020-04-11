@@ -107,11 +107,40 @@ module.exports = db => {
             }
         }).then(result => result.map(r => r.checklist_item_id))
 
-        checklist_items.forEach(res => {
+        for (let res of checklist_items){
             res.dataValues['isFinished'] = finished_user_checklists.includes(res.id)
             res.dataValues['isStarted'] = user_checklists.includes(res.id)
-        })
+            if (!res.dataValues['isFinished']){
+                res.dataValues['active'] = false
+            }
+            if (res.dataValues['isStarted']){
+                const update_by_info = await userChecklistItemModel.findOne({
+                    where: {user_id: user_id,
+                            checklist_item_id: res.id
+                    }
+                }).then(r => {
+                            return {'user_id': r.updated_by,
+                                    'updated': r.updated}
+                            })
+                if (!(update_by_info.user_id === null)){
+                    const update_user_name = await userModel.findOne({
+                        where: {id: update_by_info.user_id}
+                    }).then(r => {
+                        return {'last_name': r.last_name,
+                                'first_name': r.first_name}
+                    })
+                    console.log('WWWWWWWWWWWWW', update_user_name);
+                    res.dataValues['updatedByName'] = update_user_name;
+                    res.dataValues['updated'] = update_by_info.updated;
+                    res.dataValues['updated_by'] = update_by_info.user_id;
+                }
+                else{
+                    res.dataValues['updatedByName'] = null;
+                }
+            }
+        }
 
+        //console.log('WWWWWWWWTTTTTTFFFFFFFFf', checklist_items);
         return checklist_items
     }
 
