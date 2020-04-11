@@ -7,13 +7,34 @@ const {QueryTypes} = require('sequelize');
 module.exports = db => {
     const router = express.Router();
 
+    const userModel = db.model('users');
     const credentialModel = db.model('credentials');
     const userCredentialModel = db.model('users_credentials')
     const checklistItemModel = db.model('checklist_items')
 
 
     // Get all credentials
-    router.get('/', async (req, res) => res.json(await credentialModel.findAll()));
+    router.get('/', async (req, res) => {
+        results = await credentialModel.findAll()
+
+        for (let r of results){
+            r.dataValues['parentCredName'] = await credentialModel.findOne({
+                where: {
+                    id: r.parent_cred
+                }
+            }).then(r=>r.name);
+
+            r.dataValues['createdByUserName'] = await userModel.findOne({
+                where: {
+                    id: r.created_by
+                }
+            }).then(r=>{
+                return {'last_name': r.last_name,
+                        'first_name': r.first_name}
+            });
+        }
+        res.send(results)
+    });
 
     router.get('/:credentialID', async (req, res) => {
 
@@ -30,7 +51,26 @@ module.exports = db => {
             r.dataValues['checklist_items'] = checklist_items
             return r
         })
-        res.send(result)
+
+        const parent_cred_name = await credentialModel.findOne({
+            where: {
+                id: result.parent_cred
+            }
+        }).then(r=>r.name);
+
+        create_by_name = await userModel.findOne({
+            where: {
+                id: result.created_by
+            }
+        }).then(r=>{
+            return {'last_name': r.last_name,
+                    'first_name': r.first_name}
+        });
+
+        result.dataValues['parentCredName'] = parent_cred_name;
+        result.dataValues['createdByUserName'] = create_by_name;
+        res.send(result.dataValues);
+
     });
 
     router.get('/user/:userId', async(req, res) =>{
