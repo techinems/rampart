@@ -6,15 +6,33 @@ module.exports = db => {
 
     const promoRequestModel = db.model('promo_requests');
     const promoRequestVoteModel = db.model('promo_request_votes');
-    const credentialModel = db.model('credentials')
+    const credentialModel = db.model('credentials');
     const userModel = db.model('users')
     const userCredentialModel = db.model('users_credentials');
     const permissionModel = db.model('permissions');
     const userPermissionModel = db.model('users_permissions');
 
     // Get all promotions
-    router.get('/', async (req, res) => res.json(
-        await promoRequestModel.findAll()));
+    router.get('/', async (req, res) => {
+        results = await promoRequestModel.findAll()
+        for (let r of results){
+            r.dataValues['credentialName'] = await credentialModel.findOne({
+                where: {
+                    id: r.credential_id
+                }
+            }).then(r=>r.name);
+
+            r.dataValues['userName'] = await userModel.findOne({
+                where: {
+                    id: r.user_id
+                }
+            }).then(r=>{
+                return {'last_name': r.last_name,
+                        'first_name': r.first_name}
+            });
+        }
+        res.send(results)
+    });
 
     //Get a Promotion request detail information
     router.get('/:promotionId', async(req, res) =>{
