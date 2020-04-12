@@ -25,10 +25,10 @@ $ ./scripts/init.sh
 
 ```sql
 INSERT INTO users (id, first_name, last_name, password, dob, email, phone, admin, active, access_revoked, created_by)
-    VALUES (0, 'Yuze', 'Ma', '123456',date '1998-08-26', 'may7@rpi.edu', '5189772963', TRUE, TRUE, FALSE, 0);
+    VALUES (0, 'RPI', 'Ambulance', 'e10adc3949ba59abbe56e057f20f883e',date '1970-01-01', 'admin@rpi.edu', '5189772963', TRUE, TRUE, FALSE, 0);
 
 INSERT INTO credentials (id, name, abbr, major_cred, parent_cred, created_by)
-    VALUES (0, 'Credential_Basic', 'Cred_Basic', TRUE, 0, 0);
+    VALUES (0, 'Observer', 'OB', TRUE, 0, 0);
 
 INSERT INTO permissions (name, active, description, created_by)
 VALUES ('approve', TRUE, 'approve', 0);
