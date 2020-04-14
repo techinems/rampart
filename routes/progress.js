@@ -92,7 +92,8 @@ module.exports = db => {
     async function getDetailedProgressOfARoute(user_id, credential_id){
         var checklist_items = await checklistItemModel.findAll({
             where: {
-                credential_id: credential_id}
+                credential_id: credential_id,
+                active: true}
             })
 
         var user_checklists = await userChecklistItemModel.findAll({
@@ -110,6 +111,19 @@ module.exports = db => {
         for (let res of checklist_items){
             res.dataValues['isFinished'] = finished_user_checklists.includes(res.id)
             res.dataValues['isStarted'] = user_checklists.includes(res.id)
+            if (res.dataValues['isStarted']){
+                const comments = await userChecklistItemModel.findOne({
+                    where:{
+                        user_id: user_id,
+                        checklist_item_id: res.id}
+                }).then(result => result.comments)
+
+                res.dataValues['comments'] = comments;
+            }
+            else{
+                res.dataValues['comments'] = 'No comments';
+            }
+
             if (!res.dataValues['isFinished']){
                 res.dataValues['active'] = false
             }
@@ -119,28 +133,33 @@ module.exports = db => {
                             checklist_item_id: res.id
                     }
                 }).then(r => {
-                            return {'user_id': r.updated_by,
-                                    'updated': r.updated}
+                            return {'updated': r.updated,
+                                    'updated_by': r.updated_by,
+                                    'created': r.created,
+                                    'created_by': r.created_by}
                             })
-                if (!(update_by_info.user_id === null)){
-                    const update_user_name = await userModel.findOne({
-                        where: {id: update_by_info.user_id}
-                    }).then(r => {
-                        return {'last_name': r.last_name,
-                                'first_name': r.first_name}
-                    })
-                    console.log('WWWWWWWWWWWWW', update_user_name);
-                    res.dataValues['updatedByName'] = update_user_name;
-                    res.dataValues['updated'] = update_by_info.updated;
-                    res.dataValues['updated_by'] = update_by_info.user_id;
+
+                if (!(update_by_info.updated_by === null)){
+                    to_find_user_id = update_by_info.updated_by
+                    when_update = update_by_info.updated
                 }
                 else{
-                    res.dataValues['updatedByName'] = null;
+                    to_find_user_id = update_by_info.created_by
+                    when_update = update_by_info.created
                 }
+
+                const update_user_name = await userModel.findOne({
+                    where: {id: to_find_user_id}
+                }).then(r => {
+                    return {'last_name': r.last_name,
+                            'first_name': r.first_name}
+                })
+                res.dataValues['updatedByName'] = update_user_name;
+                res.dataValues['updated'] = when_update;
+                res.dataValues['updated_by'] = to_find_user_id;
             }
         }
 
-        //console.log('WWWWWWWWTTTTTTFFFFFFFFf', checklist_items);
         return checklist_items
     }
 
