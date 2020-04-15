@@ -45,7 +45,8 @@ module.exports = db => {
         }).then(async (r) => {
             checklist_items = await checklistItemModel.findAll({
                 where:{
-                    credential_id: req.params.credentialID
+                    credential_id: req.params.credentialID,
+                    active: true
                 }
             })
             r.dataValues['checklist_items'] = checklist_items
@@ -237,6 +238,24 @@ module.exports = db => {
         }).catch((result) =>{
             res.send({'isSuccess': false,
                     'msg':'User credential is not successfully updated'})
+        });
+    });
+
+    // put to update a credential
+    router.put('/checklistItems/', async (req, res) =>{
+        console.log("-----> Request body : ", req.body);
+        const to_update_id = req.body['checklist_item_id']
+        delete req.body['checklist_item_id']
+        await checklistItemModel.update(req.body,
+            {
+                where: {id: to_update_id}
+            }
+        ).then((result) => {
+            res.send({'isSuccess': true,
+                        'msg':'Credential Checklist Item successfully updated'})
+        }).catch((result) =>{
+            res.send({'isSuccess': false,
+                    'msg':'Credential Checklist Item is not successfully updated'})
         });
     });
 
