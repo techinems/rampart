@@ -7,15 +7,74 @@ const {QueryTypes} = require('sequelize');
 module.exports = db => {
     const router = express.Router();
 
+    const userModel = db.model('users');
     const credentialModel = db.model('credentials');
     const userCredentialModel = db.model('users_credentials')
     const checklistItemModel = db.model('checklist_items')
 
 
     // Get all credentials
-    router.get('/', async (req, res) => res.json(await credentialModel.findAll()));
+    router.get('/', async (req, res) => {
+        results = await credentialModel.findAll()
 
-    router.get('/:userId', async(req, res) =>{
+        for (let r of results){
+            r.dataValues['parentCredName'] = await credentialModel.findOne({
+                where: {
+                    id: r.parent_cred
+                }
+            }).then(r=>r.name);
+
+            r.dataValues['createdByUserName'] = await userModel.findOne({
+                where: {
+                    id: r.created_by
+                }
+            }).then(r=>{
+                return {'last_name': r.last_name,
+                        'first_name': r.first_name}
+            });
+        }
+        res.send(results)
+    });
+
+    router.get('/:credentialID', async (req, res) => {
+
+        result = await credentialModel.findOne({
+                    where: {
+                            id: req.params.credentialID
+                        }
+        }).then(async (r) => {
+            checklist_items = await checklistItemModel.findAll({
+                where:{
+                    credential_id: req.params.credentialID,
+                    active: true
+                }
+            })
+            r.dataValues['checklist_items'] = checklist_items
+            return r
+        })
+
+        const parent_cred_name = await credentialModel.findOne({
+            where: {
+                id: result.parent_cred
+            }
+        }).then(r=>r.name);
+
+        create_by_name = await userModel.findOne({
+            where: {
+                id: result.created_by
+            }
+        }).then(r=>{
+            return {'last_name': r.last_name,
+                    'first_name': r.first_name}
+        });
+
+        result.dataValues['parentCredName'] = parent_cred_name;
+        result.dataValues['createdByUserName'] = create_by_name;
+        res.send(result.dataValues);
+
+    });
+
+    router.get('/user/:userId', async(req, res) =>{
         console.log(" -----> Get user credential");
         var user_own_credential = await db.query("\
                                         SELECT name, credential_id \
@@ -134,11 +193,10 @@ module.exports = db => {
     router.post('/checklistItems/', async (req, res) => {
         console.log("-----> Request body : ", req.body);
         await checklistItemModel.create({
-            'credential_id': req.body.credential_id,
+            'credential_id': req.body['credential_id'],
             'text': req.body['text'],
             'active' : true,
-            'created_by': req.body['created_by'],
-            'updated_by': 0
+            'created_by': req.body['created_by']
         }).then((result) => {
             res.send({'isSuccess': true,
                     'msg':'credential checklist item successfully created'})
@@ -151,7 +209,7 @@ module.exports = db => {
     // put to update a credential
     router.put('/', async (req, res) =>{
         console.log("-----> Request body : ", req.body);
-        const to_update_id = req.body.credential_id
+        const to_update_id = req.body['credential_id']
         delete req.body['credential_id']
         await credentialModel.update(req.body,
             {
@@ -180,6 +238,24 @@ module.exports = db => {
         }).catch((result) =>{
             res.send({'isSuccess': false,
                     'msg':'User credential is not successfully updated'})
+        });
+    });
+
+    // put to update a credential
+    router.put('/checklistItems/', async (req, res) =>{
+        console.log("-----> Request body : ", req.body);
+        const to_update_id = req.body['checklist_item_id']
+        delete req.body['checklist_item_id']
+        await checklistItemModel.update(req.body,
+            {
+                where: {id: to_update_id}
+            }
+        ).then((result) => {
+            res.send({'isSuccess': true,
+                        'msg':'Credential Checklist Item successfully updated'})
+        }).catch((result) =>{
+            res.send({'isSuccess': false,
+                    'msg':'Credential Checklist Item is not successfully updated'})
         });
     });
 

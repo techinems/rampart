@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
             references: {
                 model: 'users',
                 key: 'id'
-            }
+            },
         },
         credential_id: {
             type: DataTypes.INTEGER,
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
             references: {
                 model: 'credentials',
                 key: 'id'
-            }
+            },
         },
         approved: {
             type: DataTypes.BOOLEAN,
@@ -35,7 +35,13 @@ module.exports = function(sequelize, DataTypes) {
         },
         date: {
             type: DataTypes.DATEONLY,
-            allowNull: false
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
         },
         created_by: {
             type: DataTypes.INTEGER,

@@ -3,6 +3,9 @@ const express = require('express');
 module.exports = db => {
     const router = express.Router();
     const userModel = db.model('users');
+    const userCredentialModel = db.model('users_credentials');
+    const permissionModel = db.model('permissions');
+    const userPermissionModel = db.model('users_permissions')
 
     router.get('/', async (req, res) => res.json(await userModel.findAll()));
 
@@ -13,6 +16,15 @@ module.exports = db => {
                         }
         }).then(r => res.send(r));
     });
+
+    async function getPermissionByUserId(userId){
+        permissions = await userPermissionModel.findAll({where: {'user_id': userId}})
+        for(let perm_record of permissions){
+            perm = await permissionModel.findOne({where: {'id': perm_record.permission_id}})
+            perm_record.dataValues['permission_name'] = perm.name
+        }  
+        return permissions
+    }
 
     // User Login
     router.post('/sessions', async(req, res) =>{
@@ -38,9 +50,14 @@ module.exports = db => {
                     where: {id: targetUser.id}
                 }
             )
+            
+            userPermissions = await getPermissionByUserId(targetUser.id);
+            
             res.send({'isSuccess': true,
                       'msg': 'Successful login',
-                      'result': targetUser})
+                      'result': targetUser,
+                      'permissions' : userPermissions
+                    })
         }
     });
 
@@ -66,7 +83,13 @@ module.exports = db => {
             'access_revoked' : false,
             'created_by': 0,
             'updated_by': 0
-        }).then((result) => {
+        }).then(async user => {
+            await userCredentialModel.create({
+                'user_id': user.id,
+                'credential_id': 0,
+                'active' : true,
+                'created_by': 0})})
+        .then((result) => {
             res.send({'isSuccess': true,
                     'msg':'user successfully created'})
         }).catch((result) =>{

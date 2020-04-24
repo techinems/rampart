@@ -1,22 +1,42 @@
-INSERT INTO users (id, first_name, last_name, password, dob, email, phone, admin, active, access_revoked, created_by)
-    VALUES (0, 'RPI', 'Ambulance', 'e10adc3949ba59abbe56e057f20f883e',date '1970-01-01', 'admin@rpi.edu', '5189772963', TRUE, TRUE, FALSE, 0);
--- SELECT setval('users_id_seq', max(id)) FROM users;
+/*
+ Navicat Premium Data Transfer
 
-INSERT INTO "public"."credentials" VALUES (0, 'Observer', 'O', 't', 0, 0, '2020-04-12 17:03:11.772805', NULL, NULL);
-INSERT INTO "public"."credentials" VALUES (1, 'Attendant', 'A', 't', 0, 0, '2020-04-12 17:04:37.55', NULL, '2020-04-12 17:04:37.55');
-INSERT INTO "public"."credentials" VALUES (2, 'Attendant Crew Chief', 'A-CC', 't', 1, 0, '2020-04-12 17:05:13.42', NULL, '2020-04-12 17:05:13.42');
-INSERT INTO "public"."credentials" VALUES (3, 'Attendant Driver', 'A-D', 't', 1, 0, '2020-04-12 17:13:39.736', NULL, '2020-04-12 17:13:39.736');
-INSERT INTO "public"."credentials" VALUES (4, 'Probationary Driver', 'P-D', 't', 3, 0, '2020-04-12 17:14:08.201', NULL, '2020-04-12 17:14:08.201');
-INSERT INTO "public"."credentials" VALUES (5, 'Driver', 'D', 't', 4, 0, '2020-04-12 17:14:16.238', NULL, '2020-04-12 17:14:16.238');
-INSERT INTO "public"."credentials" VALUES (6, 'Driver Trainer', 'D-T', 't', 5, 0, '2020-04-12 17:14:33.712', NULL, '2020-04-12 17:14:33.712');
-INSERT INTO "public"."credentials" VALUES (7, 'Probationary Crew Chief', 'P-CC', 't', 2, 0, '2020-04-12 17:15:43.83', NULL, '2020-04-12 17:15:43.83');
-INSERT INTO "public"."credentials" VALUES (8, 'Crew Chief', 'CC', 't', 7, 0, '2020-04-12 17:15:54.326', NULL, '2020-04-12 17:15:54.326');
-INSERT INTO "public"."credentials" VALUES (9, 'Crew Chief Trainer', 'CC-T', 't', 8, 0, '2020-04-12 17:16:12.29', NULL, '2020-04-12 17:16:12.29');
-INSERT INTO "public"."credentials" VALUES (10, 'FR Crew Chief ', 'FR-CC', 't', 8, 0, '2020-04-12 17:16:54.434', NULL, '2020-04-12 17:16:54.434');
-INSERT INTO "public"."credentials" VALUES (11, 'Event EMS Supervisor', 'EES', 't', 8, 0, '2020-04-12 17:17:54.895', NULL, '2020-04-12 17:17:54.895');
-INSERT INTO "public"."credentials" VALUES (12, 'Duty Supervisor', 'DS', 't', 0, 0, '2020-04-12 17:18:57.046', NULL, '2020-04-12 17:19:59.111358');
-SELECT setval('credentials_id_seq', max(id)) FROM credentials;
+ Source Server         : Rampart-Dev
+ Source Server Type    : PostgreSQL
+ Source Server Version : 120002
+ Source Host           : 18.232.121.99:5432
+ Source Catalog        : rampart
+ Source Schema         : public
 
+ Target Server Type    : PostgreSQL
+ Target Server Version : 120002
+ File Encoding         : 65001
+
+ Date: 12/04/2020 18:48:35
+*/
+
+
+-- ----------------------------
+-- Table structure for checklist_items
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."checklist_items";
+CREATE TABLE "public"."checklist_items" (
+  "id" int4 NOT NULL DEFAULT nextval('checklist_items_id_seq'::regclass),
+  "credential_id" int4 NOT NULL,
+  "text" text COLLATE "pg_catalog"."default" NOT NULL,
+  "active" bool NOT NULL,
+  "created_by" int4 NOT NULL,
+  "created" timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" int4,
+  "updated" timestamp(6)
+)
+;
+ALTER TABLE "public"."checklist_items" OWNER TO "postgres";
+
+-- ----------------------------
+-- Records of checklist_items
+-- ----------------------------
+BEGIN;
 INSERT INTO "public"."checklist_items" VALUES (1, 1, 'OSHA', 't', 0, '2020-04-12 17:34:58.331', NULL, '2020-04-12 17:34:58.331');
 INSERT INTO "public"."checklist_items" VALUES (2, 3, 'Driver License', 't', 0, '2020-04-12 17:43:38.959', NULL, '2020-04-12 17:43:38.959');
 INSERT INTO "public"."checklist_items" VALUES (3, 7, 'Call Evaluation 1', 't', 0, '2020-04-12 18:01:19.056', NULL, '2020-04-12 18:01:19.056');
@@ -94,25 +114,39 @@ INSERT INTO "public"."checklist_items" VALUES (74, 11, 'NIMS IS-800', 't', 0, '2
 INSERT INTO "public"."checklist_items" VALUES (75, 11, 'NIMS AWR-160-W', 't', 0, '2020-04-12 18:29:13.498', NULL, '2020-04-12 18:29:13.498');
 INSERT INTO "public"."checklist_items" VALUES (76, 11, 'Event Evaluation 1', 't', 0, '2020-04-12 18:29:20.777', NULL, '2020-04-12 18:29:20.777');
 INSERT INTO "public"."checklist_items" VALUES (77, 11, 'Event Evaluation 2', 't', 0, '2020-04-12 18:29:28.24', NULL, '2020-04-12 18:29:28.24');
-SELECT setval('checklist_items_id_seq', max(id)) FROM checklist_items;
+COMMIT;
 
-INSERT INTO permissions (name, active, description, created_by) VALUES ('approve', TRUE, 'approve', 0);
-INSERT INTO permissions (name, active, description, created_by) VALUES ('vote', TRUE,'vote', 0);
-INSERT INTO permissions (name, active, description, created_by) VALUES ('member_management', TRUE,'member_management', 0);
-INSERT INTO permissions (name, active, description, created_by) VALUES ('credential_management', TRUE,'credential_management', 0);
-INSERT INTO permissions (name, active, description, created_by) VALUES ('training_progress_management', TRUE,'training_progress_management', 0);
-INSERT INTO permissions (name, active, description, created_by) VALUES ('promotion_management', TRUE,'promotion_management', 0);
+-- ----------------------------
+-- Indexes structure for table checklist_items
+-- ----------------------------
+CREATE UNIQUE INDEX "PK_checklistItems" ON "public"."checklist_items" USING btree (
+  "id" "pg_catalog"."int4_ops" ASC NULLS LAST
+);
+CREATE INDEX "fkIdx_228" ON "public"."checklist_items" USING btree (
+  "credential_id" "pg_catalog"."int4_ops" ASC NULLS LAST
+);
+CREATE INDEX "fkIdx_469" ON "public"."checklist_items" USING btree (
+  "created_by" "pg_catalog"."int4_ops" ASC NULLS LAST
+);
+CREATE INDEX "fkIdx_473" ON "public"."checklist_items" USING btree (
+  "updated_by" "pg_catalog"."int4_ops" ASC NULLS LAST
+);
 
--- Admin User_Permissions
-INSERT INTO users_permissions (user_id, permission_id, active, created_by)
-VALUES (0, 1, TRUE, 0);
-INSERT INTO users_permissions (user_id, permission_id, active, created_by)
-VALUES (0, 2, TRUE, 0);
-INSERT INTO users_permissions (user_id, permission_id, active, created_by)
-VALUES (0, 3, TRUE, 0);
-INSERT INTO users_permissions (user_id, permission_id, active, created_by)
-VALUES (0, 4, TRUE, 0);
-INSERT INTO users_permissions (user_id, permission_id, active, created_by)
-VALUES (0, 5, TRUE, 0);
-INSERT INTO users_permissions (user_id, permission_id, active, created_by)
-VALUES (0, 6, TRUE, 0);
+-- ----------------------------
+-- Triggers structure for table checklist_items
+-- ----------------------------
+CREATE TRIGGER "checklist_items_autoset_update_col" BEFORE UPDATE ON "public"."checklist_items"
+FOR EACH ROW
+EXECUTE PROCEDURE "public"."autoset_update_col"();
+
+-- ----------------------------
+-- Uniques structure for table checklist_items
+-- ----------------------------
+ALTER TABLE "public"."checklist_items" ADD CONSTRAINT "Ind_583" UNIQUE ("id", "text");
+
+-- ----------------------------
+-- Foreign Keys structure for table checklist_items
+-- ----------------------------
+ALTER TABLE "public"."checklist_items" ADD CONSTRAINT "FK_228" FOREIGN KEY ("credential_id") REFERENCES "public"."credentials" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "public"."checklist_items" ADD CONSTRAINT "FK_469" FOREIGN KEY ("created_by") REFERENCES "public"."users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "public"."checklist_items" ADD CONSTRAINT "FK_473" FOREIGN KEY ("updated_by") REFERENCES "public"."users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

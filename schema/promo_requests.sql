@@ -6,6 +6,7 @@ CREATE TABLE "promo_requests"
  "approved"      boolean NOT NULL,
  "comments"      text NULL,
  "date"          date NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "active"        boolean NOT NULL DEFAULT True,
  "created_by"    int NOT NULL,
  "created"       timestamp NOT NULL,
  "updated_by"    int NULL,
