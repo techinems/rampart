@@ -1,3 +1,5 @@
+/* jshint indent: 2 */
+
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('permissions', {
         id: {
@@ -9,15 +11,20 @@ module.exports = function(sequelize, DataTypes) {
         },
         name: {
             type: DataTypes.TEXT,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         abbr: {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
         description: {
             type: DataTypes.TEXT,
-            allowNull: true
+            allowNull: false
         },
         created_by: {
             type: DataTypes.INTEGER,
