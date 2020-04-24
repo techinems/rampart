@@ -26,6 +26,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false
         },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
         created_by: {
             type: DataTypes.INTEGER,
             allowNull: false,

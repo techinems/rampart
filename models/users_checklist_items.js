@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'users',
                 key: 'id'
             },
-            unique: true
+            unique: 'user_checklist_item_index'
+
         },
         checklist_item_id: {
             type: DataTypes.INTEGER,
@@ -19,7 +20,9 @@ module.exports = function(sequelize, DataTypes) {
             references: {
                 model: 'checklist_items',
                 key: 'id'
-            }
+            },
+            unique: 'user_checklist_item_index'
+
         },
         trainer: {
             type: DataTypes.INTEGER,
@@ -29,9 +32,13 @@ module.exports = function(sequelize, DataTypes) {
                 key: 'id'
             }
         },
-        timestamp: {
-            type: DataTypes.DATE,
+        active: {
+            type: DataTypes.BOOLEAN,
             allowNull: false
+        },
+        comments: {
+            type: DataTypes.TEXT,
+            allowNull: true
         },
         created_by: {
             type: DataTypes.INTEGER,

@@ -8,7 +8,7 @@ CREATE TABLE "checklist_items"
  "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,
  "updated"       timestamp NULL,
- CONSTRAINT "Ind_583" UNIQUE ( "id" ),
+ CONSTRAINT "Ind_583" UNIQUE ( "id", "text"),
  CONSTRAINT "FK_228" FOREIGN KEY ( "credential_id" ) REFERENCES "credentials" ( "id" ),
  CONSTRAINT "FK_469" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_473" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
