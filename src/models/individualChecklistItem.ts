@@ -1,35 +1,39 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Role } from "./roles";
+import { Credential } from "./credentials";
 
-export class UserRole extends Model {
+export class UserChecklistItem extends Model {
 
     /**
      * The properties in the table
      * Non-null assertion is sadly necessary due to 
      * this class being implicity instantiated which Typescript doesn't see
      */
+    private id!: number;
+    private credential_id!: Credential;
     private user_id!: User;
-    private position_id!: Role;
-    private start_date!: string;
-    private end_date?: string;
+    private name!: string;
+    private trainer!: User;
+    private timestamp!: string;
     private created_by!: User;
     private created!: string;
     private updated_by?: User;
     private updated?: string;
 
-    static tableName = "users_roles";
+    static tableName = "individual_checklist_items";
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["user_id", "position_id", "created_by"],
+        required: ["credential_id", "user_id", "name", "trainer", "timestamp", "created_by"],
 
         properties: {
+            id: { type: "integer" },
+            credential_id: { type: "integer" },
             user_id: { type: "integer" },
-            position_id: { type: "integer" },
-            start_date: { type: "string" },
-            end_date: { type: ["string", "null"] },
+            name: { type: "string" },
+            trainer: { type: "integer" },
+            timestamp: { type: "string" },
             created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
@@ -42,23 +46,31 @@ export class UserRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.user_id`,
+                from: `${UserChecklistItem.tableName}.user_id`,
                 to: `${User.tableName}.id`
             }
         },
-        position_id: {
+        credential_id: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: Credential,
+            join: {
+                from: `${UserChecklistItem.tableName}.credential_id`,
+                to: `${Credential.tableName}.id`
+            }
+        },
+        trainer: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.position_id`,
-                to: `${Role.tableName}.id`
+                from: `${UserChecklistItem.tableName}.trainer`,
+                to: `${User.tableName}.id`
             }
         },
         created_by: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.created_by`,
+                from: `${UserChecklistItem.tableName}.created_by`,
                 to: `${User.tableName}.id`
             }
         },
@@ -66,7 +78,7 @@ export class UserRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.updated_by`,
+                from: `${UserChecklistItem.tableName}.updated_by`,
                 to: `${User.tableName}.id`
             }
         }

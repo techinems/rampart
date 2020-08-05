@@ -1,8 +1,8 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Role } from "./roles";
+import { ChecklistItem } from "./checklistItems";
 
-export class UserRole extends Model {
+export class UserChecklistItem extends Model {
 
     /**
      * The properties in the table
@@ -10,26 +10,26 @@ export class UserRole extends Model {
      * this class being implicity instantiated which Typescript doesn't see
      */
     private user_id!: User;
-    private position_id!: Role;
-    private start_date!: string;
-    private end_date?: string;
+    private checklist_item_id!: ChecklistItem;
+    private trainer!: User;
+    private timestamp!: string;
     private created_by!: User;
     private created!: string;
     private updated_by?: User;
     private updated?: string;
 
-    static tableName = "users_roles";
+    static tableName = "users_checklist_items";
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["user_id", "position_id", "created_by"],
+        required: ["user_id", "checklist_item_id", "trainer", "timestamp", "created_by"],
 
         properties: {
             user_id: { type: "integer" },
-            position_id: { type: "integer" },
-            start_date: { type: "string" },
-            end_date: { type: ["string", "null"] },
+            checklist_item_id: { type: "integer" },
+            trainer: { type: "integer" },
+            timestamp: { type: "string" },
             created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
@@ -42,23 +42,31 @@ export class UserRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.user_id`,
+                from: `${UserChecklistItem.tableName}.user_id`,
                 to: `${User.tableName}.id`
             }
         },
-        position_id: {
+        checklist_item_id: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: ChecklistItem,
+            join: {
+                from: `${UserChecklistItem.tableName}.checklist_item_id`,
+                to: `${ChecklistItem.tableName}.id`
+            }
+        },
+        trainer: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.position_id`,
-                to: `${Role.tableName}.id`
+                from: `${UserChecklistItem.tableName}.trainer`,
+                to: `${User.tableName}.id`
             }
         },
         created_by: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.created_by`,
+                from: `${UserChecklistItem.tableName}.created_by`,
                 to: `${User.tableName}.id`
             }
         },
@@ -66,7 +74,7 @@ export class UserRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserRole.tableName}.updated_by`,
+                from: `${UserChecklistItem.tableName}.updated_by`,
                 to: `${User.tableName}.id`
             }
         }
