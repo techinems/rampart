@@ -4,6 +4,8 @@ import * as bodyParser from "body-parser";
 import * as Knex from "knex";
 import { Model } from "objection";
 import { userRouter } from "./userRouter";
+import { jwtRouter } from "./auth/jwtRouter";
+import { permissionsMiddleware } from "./auth/tokenVerify";
 
 // Load our environment variables 
 dotenv.config();
@@ -25,7 +27,11 @@ const knex = Knex({
 
 Model.knex(knex);
 
-app.use("/user", userRouter);
+app.use("/jwt", jwtRouter);
 app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart endpoint is online and healthy!"));
+
+// Express middleware order matters, placing it here prevents anything above it from requiring a token
+app.use(permissionsMiddleware);
+app.use("/user", userRouter);
 
 app.listen(port, () => console.log(`Rampart is listening on PORT: ${port}`));
