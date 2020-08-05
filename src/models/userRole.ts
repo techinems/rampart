@@ -2,8 +2,7 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { Role } from "./roles";
 
-// Represents a Credential in our database
-export class userRole extends Model {
+export class UserRole extends Model {
 
     /**
      * The properties in the table
@@ -30,7 +29,7 @@ export class userRole extends Model {
             user_id: { type: "integer" },
             position_id: { type: ["string", "null"] },
             start_date: { type: "string" },
-            end_date: {type: ["string", "null"]},
+            end_date: { type: ["string", "null"] },
             created_by: { type: "number" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
@@ -43,7 +42,7 @@ export class userRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userRole.tableName}.user_id`,
+                from: `${UserRole.tableName}.user_id`,
                 to: `${User.tableName}.id`
             }
         },
@@ -51,7 +50,7 @@ export class userRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userRole.tableName}.position_id`,
+                from: `${UserRole.tableName}.position_id`,
                 to: `${Role.tableName}.id`
             }
         },
@@ -59,7 +58,7 @@ export class userRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userRole.tableName}.created_by`,
+                from: `${UserRole.tableName}.created_by`,
                 to: `${User.tableName}.id`
             }
         },
@@ -67,7 +66,7 @@ export class userRole extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userRole.tableName}.updated_by`,
+                from: `${UserRole.tableName}.updated_by`,
                 to: `${User.tableName}.id`
             }
         }

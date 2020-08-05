@@ -1,9 +1,8 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Credential } from "./credentials"
+import { Credential } from "./credentials";
 
-// Represents a Credential in our database
-export class userCredential extends Model {
+export class UserCredential extends Model {
 
     /**
      * The properties in the table
@@ -41,7 +40,7 @@ export class userCredential extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userCredential.tableName}.user_id`,
+                from: `${UserCredential.tableName}.user_id`,
                 to: `${User.tableName}.id`
             }
         },
@@ -49,7 +48,7 @@ export class userCredential extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: Credential,
             join: {
-                from: `${userCredential.tableName}.credential_id`,
+                from: `${UserCredential.tableName}.credential_id`,
                 to: `${Credential.tableName}.id`
             }
         },
@@ -57,7 +56,7 @@ export class userCredential extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userCredential.tableName}.created_by`,
+                from: `${UserCredential.tableName}.created_by`,
                 to: `${User.tableName}.id`
             }
         },
@@ -65,7 +64,7 @@ export class userCredential extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${userCredential.tableName}.updated_by`,
+                from: `${UserCredential.tableName}.updated_by`,
                 to: `${User.tableName}.id`
             }
         }

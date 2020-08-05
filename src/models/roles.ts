@@ -1,7 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 
-// Represents a Credential in our database
 export class Role extends Model {
 
     /**
@@ -30,7 +29,7 @@ export class Role extends Model {
             id: { type: "integer" },
             name: { type: ["string", "null"] },
             officer:{ type: "boolean" },
-            admin: { tyep: "boolean" },
+            admin: { type: "boolean" },
             created_by: { type: "number" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
