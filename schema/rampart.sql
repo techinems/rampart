@@ -905,7 +905,7 @@ CREATE TABLE "individual_checklist_items"
  "credential_id" int NOT NULL,
  "user_id"       int NOT NULL,
  "name"          text NOT NULL,
- "trainer"       int NOT NULL,
+ "trainer_id"    int NOT NULL,
  "timestamp"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "created_by"    int NOT NULL,
  "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -914,7 +914,7 @@ CREATE TABLE "individual_checklist_items"
  CONSTRAINT "Ind_582" UNIQUE ( "id" ),
  CONSTRAINT "FK_333" FOREIGN KEY ( "user_id" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_336" FOREIGN KEY ( "credential_id" ) REFERENCES "credentials" ( "id" ),
- CONSTRAINT "FK_340" FOREIGN KEY ( "trainer" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_340" FOREIGN KEY ( "trainer_id" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_477" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_481" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
 );
@@ -936,7 +936,7 @@ CREATE INDEX "fkIdx_336" ON "individual_checklist_items"
 
 CREATE INDEX "fkIdx_340" ON "individual_checklist_items"
 (
- "trainer"
+ "trainer_id"
 );
 
 CREATE INDEX "fkIdx_477" ON "individual_checklist_items"
@@ -1190,7 +1190,7 @@ CREATE TABLE "users_checklist_items"
 (
  "user_id"           int NOT NULL,
  "checklist_item_id" int NOT NULL,
- "trainer"           int NOT NULL,
+ "trainer_id"        int NOT NULL,
  "timestamp"         timestamp NOT NULL,
  "created_by"        int NOT NULL,
  "created"           timestamp NOT NULL,
@@ -1199,7 +1199,7 @@ CREATE TABLE "users_checklist_items"
  CONSTRAINT "Ind_584" UNIQUE ( "user_id", "checklist_item_id" ),
  CONSTRAINT "FK_234" FOREIGN KEY ( "checklist_item_id" ) REFERENCES "checklist_items" ( "id" ),
  CONSTRAINT "FK_238" FOREIGN KEY ( "user_id" ) REFERENCES "users" ( "id" ),
- CONSTRAINT "FK_241" FOREIGN KEY ( "trainer" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_241" FOREIGN KEY ( "trainer_id" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_461" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_465" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
 );
@@ -1222,7 +1222,7 @@ CREATE INDEX "fkIdx_238" ON "users_checklist_items"
 
 CREATE INDEX "fkIdx_241" ON "users_checklist_items"
 (
- "trainer"
+ "trainer_id"
 );
 
 CREATE INDEX "fkIdx_461" ON "users_checklist_items"

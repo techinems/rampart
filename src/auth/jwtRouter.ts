@@ -11,9 +11,9 @@ jwtRouter.get("/issue", (_: express.Request, res: express.Response) => {
         });
         return;
     }
-    // Hard-coded the user permissions for now, but we would fetch what permissions the machine ID has
+    // Hard-coded all permissions for now, but we would fetch what permissions the machine ID has
     const token = jwt.sign({
-       permissions: ["user.read", "user.write", "user.update", "user.delete"] 
+       permissions: ["*"] 
     }, process.env.JWT_SECRET, {
         expiresIn: "1d"
     });

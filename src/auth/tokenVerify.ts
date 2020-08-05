@@ -29,7 +29,8 @@ export function permissionsMiddleware(req: Request, res: Response, next: NextFun
     }
     try {
         const parsedToken = jwt.verify(token, process.env.JWT_SECRET) as JWT;
-        if (!parsedToken.permissions.includes(permission)) {
+        // Checks if it explicitly has the permission, or all permissions, or all permissions for that group
+        if (!(parsedToken.permissions.includes(permission) || parsedToken.permissions.includes("*") || parsedToken.permissions.includes(`${parsedOriginalUrl}.*`))) {
             res.status(503);
             res.send({
                 errorMessage: `JWT does not contain ${permission} which is required for this endpoint!`

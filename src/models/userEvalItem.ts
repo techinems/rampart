@@ -10,13 +10,13 @@ export class UserEvalItem extends Model {
      * this class being implicity instantiated which Typescript doesn't see
      */
     private id!: number;
-    private user_id!: User;
-    private eval_item_id!: EvalItem;
+    private user!: User;
+    private eval_item!: EvalItem;
     private eval_num!: number;
     private score?: number; // #TODO: this might need to change to string
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "eval_items";
@@ -40,7 +40,7 @@ export class UserEvalItem extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user_id: {
+        user: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -48,7 +48,7 @@ export class UserEvalItem extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        eval_item_id: {
+        eval_item: {
             relation: Model.BelongsToOneRelation,
             modelClass: EvalItem,
             join: {
@@ -56,7 +56,7 @@ export class UserEvalItem extends Model {
                 to: `${EvalItem.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -64,7 +64,7 @@ export class UserEvalItem extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

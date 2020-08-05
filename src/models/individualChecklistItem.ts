@@ -1,6 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Credential } from "./credentials";
+import { Credential } from "./credential";
 
 export class UserChecklistItem extends Model {
 

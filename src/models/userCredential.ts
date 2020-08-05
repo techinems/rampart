@@ -1,6 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Credential } from "./credentials";
+import { Credential } from "./credential";
 
 export class UserCredential extends Model {
 
@@ -9,12 +9,12 @@ export class UserCredential extends Model {
      * Non-null assertion is sadly necessary due to 
      * this class being implicity instantiated which Typescript doesn't see
      */
-    private user_id!: User;
-    private credential_id!: Credential;
+    private user!: User;
+    private credential!: Credential;
     private date_promoted?: string;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "users_credentials";
@@ -36,7 +36,7 @@ export class UserCredential extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user_id: {
+        user: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -44,7 +44,7 @@ export class UserCredential extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        credential_id: {
+        credential: {
             relation: Model.BelongsToOneRelation,
             modelClass: Credential,
             join: {
@@ -52,7 +52,7 @@ export class UserCredential extends Model {
                 to: `${Credential.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -60,7 +60,7 @@ export class UserCredential extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

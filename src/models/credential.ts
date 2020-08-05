@@ -14,9 +14,9 @@ export class Credential extends Model {
     private abbr?: string;
     private major_cred!: boolean;
     private parent_cred?: Credential;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "credentials";
@@ -40,7 +40,7 @@ export class Credential extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -48,7 +48,7 @@ export class Credential extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

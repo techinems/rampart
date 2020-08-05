@@ -9,13 +9,13 @@ export class UserRole extends Model {
      * Non-null assertion is sadly necessary due to 
      * this class being implicity instantiated which Typescript doesn't see
      */
-    private user_id!: User;
-    private position_id!: Role;
+    private user!: User;
+    private position!: Role;
     private start_date!: string;
     private end_date?: string;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "users_roles";
@@ -38,7 +38,7 @@ export class UserRole extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user_id: {
+        user: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -46,7 +46,7 @@ export class UserRole extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        position_id: {
+        position: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -54,7 +54,7 @@ export class UserRole extends Model {
                 to: `${Role.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -62,7 +62,7 @@ export class UserRole extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

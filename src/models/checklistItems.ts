@@ -1,6 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Credential } from "./credentials";
+import { Credential } from "./credential";
 
 export class ChecklistItem extends Model {
 
@@ -10,12 +10,12 @@ export class ChecklistItem extends Model {
      * this class being implicity instantiated which Typescript doesn't see
      */
     private id!: number;
-    private credential_id!: Credential;
+    private credential!: Credential;
     private text!: string;
     private active!: boolean;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "checklist_items";
@@ -38,7 +38,7 @@ export class ChecklistItem extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        credential_id: {
+        credential: {
             relation: Model.BelongsToOneRelation,
             modelClass: Credential,
             join: {
@@ -46,7 +46,7 @@ export class ChecklistItem extends Model {
                 to: `${Credential.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -54,7 +54,7 @@ export class ChecklistItem extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

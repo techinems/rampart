@@ -1,6 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Credential } from "./credentials";
+import { Credential } from "./credential";
 
 export class EvalItem extends Model {
 
@@ -10,13 +10,13 @@ export class EvalItem extends Model {
      * this class being implicity instantiated which Typescript doesn't see
      */
     private id!: number;
-    private credential_id!: Credential;
+    private credential!: Credential;
     private name!: string;
     private grading_type!: number;
     private active!: boolean;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "eval_items";
@@ -40,7 +40,7 @@ export class EvalItem extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        credential_id: {
+        credential: {
             relation: Model.BelongsToOneRelation,
             modelClass: Credential,
             join: {
@@ -48,7 +48,7 @@ export class EvalItem extends Model {
                 to: `${Credential.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -56,7 +56,7 @@ export class EvalItem extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

@@ -1,6 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Credential } from "./credentials";
+import { Credential } from "./credential";
 
 export class PromoRequest extends Model {
 
@@ -10,14 +10,14 @@ export class PromoRequest extends Model {
      * this class being implicity instantiated which Typescript doesn't see
      */
     private id!: number;
-    private user_id!: User;
-    private credential_id!: Credential;
+    private user!: User;
+    private credential!: Credential;
     private approved!: boolean;
     private comments?: string;
     private date!: string;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "eval_items";
@@ -42,7 +42,7 @@ export class PromoRequest extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user_id: {
+        user: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -50,7 +50,7 @@ export class PromoRequest extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        credential_id: {
+        credential: {
             relation: Model.BelongsToOneRelation,
             modelClass: Credential,
             join: {
@@ -58,7 +58,7 @@ export class PromoRequest extends Model {
                 to: `${Credential.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -66,7 +66,7 @@ export class PromoRequest extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

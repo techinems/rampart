@@ -9,13 +9,13 @@ export class UserChecklistItem extends Model {
      * Non-null assertion is sadly necessary due to 
      * this class being implicity instantiated which Typescript doesn't see
      */
-    private user_id!: User;
-    private checklist_item_id!: ChecklistItem;
+    private user!: User;
+    private checklist_item!: ChecklistItem;
     private trainer!: User;
     private timestamp!: string;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "users_checklist_items";
@@ -23,12 +23,12 @@ export class UserChecklistItem extends Model {
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["user_id", "checklist_item_id", "trainer", "timestamp", "created_by"],
+        required: ["user_id", "checklist_item_id", "trainer_id", "timestamp", "created_by"],
 
         properties: {
             user_id: { type: "integer" },
             checklist_item_id: { type: "integer" },
-            trainer: { type: "integer" },
+            trainer_id: { type: "integer" },
             timestamp: { type: "string" },
             created_by: { type: "integer" },
             created: { type: "string" },
@@ -38,7 +38,7 @@ export class UserChecklistItem extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user_id: {
+        user: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -46,7 +46,7 @@ export class UserChecklistItem extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        checklist_item_id: {
+        checklist_item: {
             relation: Model.BelongsToOneRelation,
             modelClass: ChecklistItem,
             join: {
@@ -58,11 +58,11 @@ export class UserChecklistItem extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserChecklistItem.tableName}.trainer`,
+                from: `${UserChecklistItem.tableName}.trainer_id`,
                 to: `${User.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -70,7 +70,7 @@ export class UserChecklistItem extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

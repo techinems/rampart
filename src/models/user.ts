@@ -24,9 +24,9 @@ export class User extends Model {
     private access_revoked!: boolean;
     private g_id?: string;
     private slack_id?: string;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "users";
@@ -70,7 +70,7 @@ export class User extends Model {
     // This object defines the relations to other models. The relationMappings
     // property can be a thunk to prevent circular dependencies.
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -78,7 +78,7 @@ export class User extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {

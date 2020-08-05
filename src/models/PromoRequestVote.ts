@@ -11,13 +11,13 @@ export class PromoRequestVote extends Model {
      * this class being implicity instantiated which Typescript doesn't see
      */
 
-    private user_id!: User;
-    private promo_request_id!: PromoRequest;
+    private user!: User;
+    private promo_request!: PromoRequest;
     private vote!: boolean;
     private comments!: string;
-    private created_by!: User;
+    private creator!: User;
     private created!: string;
-    private updated_by?: User;
+    private updator?: User;
     private updated?: string;
 
     static tableName = "eval_items";
@@ -40,7 +40,7 @@ export class PromoRequestVote extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user_id: {
+        user: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -48,7 +48,7 @@ export class PromoRequestVote extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        promo_request_id: {
+        promo_request: {
             relation: Model.BelongsToOneRelation,
             modelClass: PromoRequest,
             join: {
@@ -56,7 +56,7 @@ export class PromoRequestVote extends Model {
                 to: `${PromoRequest.tableName}.id`
             }
         },
-        created_by: {
+        creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
@@ -64,7 +64,7 @@ export class PromoRequestVote extends Model {
                 to: `${User.tableName}.id`
             }
         },
-        updated_by: {
+        updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
