@@ -28,7 +28,7 @@ export class UserCredential extends Model {
             user_id: { type: "integer" },
             credential_id: { type: "integer" },
             date_promoted: { type: ["string", "null"] },
-            created_by: { type: "number" },
+            created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
             updated: { type: ["string", "null"] } 

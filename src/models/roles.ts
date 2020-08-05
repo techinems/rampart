@@ -30,7 +30,7 @@ export class Role extends Model {
             name: { type: ["string", "null"] },
             officer:{ type: "boolean" },
             admin: { type: "boolean" },
-            created_by: { type: "number" },
+            created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
             updated: { type: ["string", "null"] } 

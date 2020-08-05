@@ -30,7 +30,7 @@ export class UserRole extends Model {
             position_id: { type: ["string", "null"] },
             start_date: { type: "string" },
             end_date: { type: ["string", "null"] },
-            created_by: { type: "number" },
+            created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
             updated: { type: ["string", "null"] } 

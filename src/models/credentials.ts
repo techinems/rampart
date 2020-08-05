@@ -32,7 +32,7 @@ export class Credential extends Model {
             abbr: { type: ["string", "null"] },
             major_cred: { type: "boolean" },
             parent_cred: { type: ["integer", "null"] },
-            created_by: { type: "number" },
+            created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
             updated: { type: ["string", "null"] } 
