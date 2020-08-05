@@ -19,7 +19,7 @@ export class userRole extends Model {
     private updated_by?: User;
     private updated?: string;
 
-    static tableName = "credentials";
+    static tableName = "users_roles";
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {

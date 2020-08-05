@@ -19,8 +19,6 @@ export class Role extends Model {
     private updated_by?: User;
     private updated?: string;
 
-    private usersWithRole!: Users[];
-
     static tableName = "roles";
 
     // Used for validation, whenever a model is created it checks this
