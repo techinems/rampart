@@ -809,7 +809,7 @@ CREATE TABLE "promo_requests"
  "credential_id" int NOT NULL,
  "approved"      boolean NOT NULL,
  "comments"      text NULL,
- "date"          date NOT NULL,
+ "date"          date NOT NULL DEFAULT CURRENT_DATE,
  "created_by"    int NOT NULL,
  "created"       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"    int NULL,

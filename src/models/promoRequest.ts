@@ -20,12 +20,12 @@ export class PromoRequest extends Model {
     private updator?: User;
     private updated?: string;
 
-    static tableName = "eval_items";
+    static tableName = "promo_requests";
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["user_id", "credential_id", "created_by"],
+        required: ["user_id", "approved", "credential_id", "created_by"],
 
         properties: {
             id: { type: "integer" },

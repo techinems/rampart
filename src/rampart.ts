@@ -9,6 +9,7 @@ import { permissionsMiddleware } from "./auth/tokenVerify";
 import { credentialRouter } from "./routers/credentialRouter";
 import { userCredentialRouter } from "./routers/userCredentialRouter";
 import { checklistItemRouter } from "./routers/checklistItemRouter";
+import { promoRequestRouter } from "./routers/promoRequestRouter";
 
 // Load our environment variables 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use(permissionsMiddleware);
 app.use("/credential", credentialRouter);
 app.use("/user_credential", userCredentialRouter);
 app.use("/checklist_item", checklistItemRouter);
+app.use("/promo_request", promoRequestRouter);
 app.use("/user", userRouter);
 
 app.listen(port, () => console.log(`Rampart is listening on PORT: ${port}`));
