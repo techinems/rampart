@@ -21,7 +21,7 @@ promoRequestRouter.put("/", async (req: Request, res: Response) => {
 promoRequestRouter.get("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
-        const promoRequest = await PromoRequest.query().findById(id).withGraphJoined("credential").withGraphJoined("user");
+        const promoRequest = await PromoRequest.query().findById(id).withGraphJoined("credential").withGraphJoined("user(liteUser)");
         res.send(promoRequest);
     } catch (err) {
         // If there's not a status code in the error we go with 400
