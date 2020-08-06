@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { User } from "../models/user";
 import { UserCredential } from "../models/userCredential";
 
 export const userCredentialRouter = Router();
@@ -52,7 +51,7 @@ userCredentialRouter.post("/:user_id/:cred_id", async (req: Request, res: Respon
         const user_id: number = parseInt(req.params.user_id);
         const cred_id: number = parseInt(req.params.cred_id);
         // This req.body is a partial user_credential which contains the items which are ready to be updated
-        const credential = await User.query().where("credential_id", cred_id).where("user_id", user_id).patchAndFetch(req.body);
+        const credential = await UserCredential.query().where("credential_id", cred_id).where("user_id", user_id).patchAndFetch(req.body);
         res.send(credential);
     } catch (err) {
         console.log(err);

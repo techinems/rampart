@@ -1,6 +1,6 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { Role } from "./roles";
+import { Role } from "./role";
 
 export class UserRole extends Model {
 

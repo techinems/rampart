@@ -8,6 +8,7 @@ import { jwtRouter } from "./auth/jwtRouter";
 import { permissionsMiddleware } from "./auth/tokenVerify";
 import { credentialRouter } from "./routers/credentialRouter";
 import { userCredentialRouter } from "./routers/userCredentialRouter";
+import { checklistItemRouter } from "./routers/checklistItemRouter";
 
 // Load our environment variables 
 dotenv.config();
@@ -36,6 +37,7 @@ app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart 
 app.use(permissionsMiddleware);
 app.use("/credential", credentialRouter);
 app.use("/user_credential", userCredentialRouter);
+app.use("/checklist_item", checklistItemRouter);
 app.use("/user", userRouter);
 
 app.listen(port, () => console.log(`Rampart is listening on PORT: ${port}`));
