@@ -18,6 +18,7 @@ export class UserCredential extends Model {
     private updated?: string;
 
     static tableName = "users_credentials";
+    static idColumn = ["user_id", "credential_id"];
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {

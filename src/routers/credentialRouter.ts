@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { Credential } from "./models/credential";
+import { Credential } from "../models/credential";
 
 export const credentialRouter = Router();
 

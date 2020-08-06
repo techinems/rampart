@@ -3,10 +3,11 @@ import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
 import * as Knex from "knex";
 import { Model } from "objection";
-import { userRouter } from "./userRouter";
+import { userRouter } from "./routers/userRouter";
 import { jwtRouter } from "./auth/jwtRouter";
 import { permissionsMiddleware } from "./auth/tokenVerify";
-import { credentialRouter } from "./credentialRouter";
+import { credentialRouter } from "./routers/credentialRouter";
+import { userCredentialRouter } from "./routers/userCredentialRouter";
 
 // Load our environment variables 
 dotenv.config();
@@ -34,6 +35,7 @@ app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart 
 // Express middleware order matters, placing it here prevents anything above it from requiring a token
 app.use(permissionsMiddleware);
 app.use("/credential", credentialRouter);
+app.use("/user_credential", userCredentialRouter);
 app.use("/user", userRouter);
 
 app.listen(port, () => console.log(`Rampart is listening on PORT: ${port}`));
