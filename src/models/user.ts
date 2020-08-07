@@ -1,5 +1,76 @@
 import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modifiers } from "objection";
-
+/**
+ * @swagger
+ *
+ * definitions:
+ *   User:
+ *     type: object
+ *     required:
+  *       - "first_name"
+  *       - "last_name"
+  *       - "dob"
+  *       - "email"
+  *       - "phone"
+  *       - "admin"
+  *       - "active"
+  *       - "access_revoked"
+  *       - "created_by"
+ *     properties:
+ *           id: 
+ *             type: "integer"
+ *           first_name: 
+ *             type: "string"
+ *           last_name:  
+ *             type: "string"
+ *           nine_hundred:
+ *             type: "integer"
+ *           dob:
+ *             type: "string"
+ *           email:
+ *             type: "string"
+ *           home_street: 
+ *             type: "string"
+ *           home_city: 
+ *             type: "string"
+ *           home_state:
+ *             type: "string"
+ *           home_zip:
+ *             type: "string"
+ *           local_street:
+ *             type: "string"
+ *           local_city:
+ *             type: "string"
+ *           local_state: 
+ *             type: "string"
+ *           local_zip:
+ *             type: "string"
+ *           phone: 
+ *             type: "string"
+ *           rcs_id:
+ *             type: "string"
+ *           rin:
+ *             type: "integer"
+ *           admin:
+ *              type: "boolean" 
+ *           last_login:
+ *              type: "string"
+ *           active: 
+ *              type: "boolean"
+ *           access_revoked:
+ *              type: "boolean"
+ *           g_id: 
+ *              type: "string"
+ *           slack_id:
+ *              type: "string"
+ *           created_by: 
+ *              type: "integer"
+ *           created: 
+ *              type: "string"
+ *           updated_by: 
+ *              type: "integer"
+ *           updated: 
+ *              type: "string"
+ */
 export class User extends Model {
     private id!: number;
     private first_name!: string;

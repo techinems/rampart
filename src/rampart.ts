@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
+import * as swaggerJSDoc from "swagger-jsdoc";
 import * as Knex from "knex";
 import { Model } from "objection";
 import { userRouter } from "./routers/userRouter";
@@ -14,9 +15,42 @@ import { promoRequestRouter } from "./routers/promoRequestRouter";
 // Load our environment variables 
 dotenv.config();
 
+
 const app = express();
-app.use(bodyParser.json());
-// Port above 1024 is a good choice as they're not privileged
+app.use(bodyParser.json({
+  strict: false,
+}));
+
+// -- setup up swagger-jsdoc --
+const swaggerDefinition = {
+  info: {
+    title: "Rampart",
+    version: "1.0.0",
+    description: "All ambulance things",
+  },
+  host: "localhost",
+  port: process.env.RAMPART_PORT,
+  basePath: "/"
+};
+const options = {
+  swaggerDefinition,
+  apis: ["src/models/*","src/routers/*"],
+};
+const swaggerSpec = swaggerJSDoc(options);
+
+// -- routes for docs and generated swagger spec --
+
+app.get("/swagger.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
+
+app.get("/docs", (req, res) => {
+    res.sendFile("/var/www/app/src/rampartDoc.html");
+  });
+
+// Port above 1024 is a good choice as they"re not privileged
 const port = process.env.RAMPART_PORT;
 
 const knex = Knex({
@@ -30,6 +64,14 @@ const knex = Knex({
 });
 
 Model.knex(knex);
+
+
+
+
+
+
+
+
 
 app.use("/jwt", jwtRouter);
 app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart endpoint is online and healthy!"));

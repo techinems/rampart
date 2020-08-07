@@ -3,7 +3,26 @@ import { User } from "../models/user";
 
 export const userRouter = Router();
 
+
 // Expects as req.body which confirms to the user object, else errors out and returns a bad request
+/**
+ * @swagger
+ * /user/:
+ *   put:
+ *     summary: Add user
+ *     description: Add a user
+ *     tags:
+ *       - user
+ *     requestBody:
+ *      description: user object 
+ *      content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/User'
+ *     responses:
+ *          400:
+ *              description: error
+ */
 userRouter.put("/", async (req: Request, res: Response) => {
     try {
         const insertion = await User.transaction(async trx => {
@@ -18,6 +37,19 @@ userRouter.put("/", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ *  /user/:id:
+ *      get:
+ *          summary: get a user by id
+ *          tags: 
+ *              - user
+ *          responses:
+ *              200:
+ *                  description: User returned
+ *                  schema:
+ *                      $ref: '#/definitions/User'
+ */
 userRouter.get("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
@@ -30,6 +62,17 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ *  /user/:id:
+ *      delete:
+ *          summary: delete a user by id
+ *          responses:
+ *              200:
+ *                  description: number deleted
+ *          tags: 
+ *              - user
+ */
 userRouter.delete("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
@@ -44,6 +87,20 @@ userRouter.delete("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ *  /user/:id:
+ *      post:
+ *          summary: update a user by id
+ *          tags: 
+ *              - user
+ *          requestBody:
+ *              description: user object 
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/User'
+ */
 userRouter.post("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
