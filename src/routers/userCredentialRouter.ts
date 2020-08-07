@@ -31,6 +31,18 @@ userCredentialRouter.get("/:user_id", async (req: Request, res: Response) => {
     }
 });
 
+userCredentialRouter.get("/users/:cred_id", async (req: Request, res: Response) => {
+    try {
+        const id: number = parseInt(req.params.cred_id);
+        const users = await UserCredential.query().where("credential_id", id).withGraphFetched("user(liteUser)");
+        res.send(users);
+    } catch (err) {
+        // If there's not a status code in the error we go with 400
+        res.status(err.statusCode ?? 400);
+        res.send(err);
+    }
+});
+
 userCredentialRouter.delete("/:user_id/:cred_id", async (req: Request, res: Response) => {
     try {
         const user_id: number = parseInt(req.params.user_id);
