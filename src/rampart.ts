@@ -65,14 +65,6 @@ const knex = Knex({
 
 Model.knex(knex);
 
-
-
-
-
-
-
-
-
 app.use("/jwt", jwtRouter);
 app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart endpoint is online and healthy!"));
 
