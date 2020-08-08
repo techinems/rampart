@@ -4,6 +4,21 @@ import { UserCredential } from "../models/userCredential";
 export const userCredentialRouter = Router();
 
 // Expects as req.body which confirms to the UserCredential object, else errors out and returns a bad request
+/**
+ * @swagger
+ * /user_credential/:
+ *   put:
+ *     summary: User credential
+ *     description: Assign a credential to a user
+ *     tags:
+ *       - user credential
+ *     requestBody:
+ *      description: user object 
+ *      content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/UserCredential'
+ */
 userCredentialRouter.put("/", async (req: Request, res: Response) => {
     try {
         const insertion = await UserCredential.transaction(async trx => {
@@ -19,6 +34,15 @@ userCredentialRouter.put("/", async (req: Request, res: Response) => {
 });
 
 // Here's a little different in that we query by user_id and it returns all credentials
+/**
+ * @swagger
+ * /user_credential/:user_id:
+ *   get:
+ *     summary: User's credential
+ *     description: Get all credentials for a user
+ *     tags:
+ *       - user credential
+ */
 userCredentialRouter.get("/:user_id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.user_id);
@@ -31,6 +55,15 @@ userCredentialRouter.get("/:user_id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /user_credential/users/:cred_id:
+ *   get:
+ *     summary: Users with credential
+ *     description: Get all users with a given credential
+ *     tags:
+ *       - user credential
+ */
 userCredentialRouter.get("/users/:cred_id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.cred_id);
@@ -43,6 +76,15 @@ userCredentialRouter.get("/users/:cred_id", async (req: Request, res: Response) 
     }
 });
 
+/**
+ * @swagger
+ * /:user_id/:cred_id:
+ *   delete:
+ *     summary: Delete a credential
+ *     description: Delete a user's credential
+ *     tags:
+ *       - user credential
+ */
 userCredentialRouter.delete("/:user_id/:cred_id", async (req: Request, res: Response) => {
     try {
         const user_id: number = parseInt(req.params.user_id);
@@ -58,6 +100,15 @@ userCredentialRouter.delete("/:user_id/:cred_id", async (req: Request, res: Resp
     }
 });
 
+/**
+ * @swagger
+ * /:user_id/:cred_id:
+ *   post:
+ *     summary: Update a credential
+ *     description: Update a user's credential
+ *     tags:
+ *       - user credential
+ */
 userCredentialRouter.post("/:user_id/:cred_id", async (req: Request, res: Response) => {
     try {
         const user_id: number = parseInt(req.params.user_id);

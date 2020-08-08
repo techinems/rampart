@@ -24,52 +24,68 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  *             type: "string"
  *           nine_hundred:
  *             type: "integer"
+ *             nullable: true
  *           dob:
  *             type: "string"
  *           email:
  *             type: "string"
  *           home_street: 
  *             type: "string"
+ *             nullable: true
  *           home_city: 
  *             type: "string"
+ *             nullable: true
  *           home_state:
  *             type: "string"
+ *             nullable: true
  *           home_zip:
  *             type: "string"
+ *             nullable: true
  *           local_street:
  *             type: "string"
+ *             nullable: true
  *           local_city:
  *             type: "string"
+ *             nullable: true
  *           local_state: 
  *             type: "string"
+ *             nullable: true
  *           local_zip:
  *             type: "string"
+ *             nullable: true
  *           phone: 
  *             type: "string"
  *           rcs_id:
  *             type: "string"
+ *             nullable: true
  *           rin:
  *             type: "integer"
+ *             nullable: true
  *           admin:
  *              type: "boolean" 
  *           last_login:
  *              type: "string"
+ *              nullable: true
  *           active: 
  *              type: "boolean"
  *           access_revoked:
  *              type: "boolean"
  *           g_id: 
  *              type: "string"
+ *              nullable: true
  *           slack_id:
  *              type: "string"
+ *              nullable: true
  *           created_by: 
  *              type: "integer"
  *           created: 
  *              type: "string"
  *           updated_by: 
  *              type: "integer"
+ *              nullable: true
  *           updated: 
  *              type: "string"
+ *              nullable: true
  */
 export class User extends Model {
     private id!: number;

@@ -2,6 +2,35 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { Credential } from "./credential";
 
+/**
+ * @swagger
+ *  definitions:
+ *      UserCredential:
+ *          type: object
+ *          required:
+ *              - "user_id"
+ *              - "credential_id"
+ *              - "created_by"
+ *          properties:
+ *              user_id:
+ *                  type: integer
+ *              credential_id:
+ *                  type: integer
+ *              date_promoted:
+ *                  type: string
+ *                  nullable: true
+ *              created_by:
+ *                  type: integer
+ *              created:
+ *                  type: string
+ *              updated_by:
+ *                  type: integer
+ *                  nullable: true
+ *              updated:
+ *                  type: string
+ *                  nullable: true
+ *              
+ */
 export class UserCredential extends Model {
 
     /**
