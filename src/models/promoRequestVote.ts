@@ -2,7 +2,37 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { PromoRequest } from "./promoRequest";
 
-
+/**
+ * @swagger
+ * definitions:
+ *  PromoRequestVote:
+ *      type: object
+ *      required:
+ *          - "user_id"
+ *          - "promo_request_id"
+ *          - "vote"
+ *          - "comments"
+ *          - "created_by"
+ *      properties:
+ *          user_id:
+ *              type: integer
+ *          promo_request_id:
+ *              type: integer
+ *          vote:
+ *              type: boolean
+ *          comments:
+ *              type: string
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true      
+ */
 export class PromoRequestVote extends Model {
 
     /**
