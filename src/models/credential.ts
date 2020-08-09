@@ -1,7 +1,39 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 
-// Represents a Credential in our database
+/**
+ * @swagger
+ * definitions:
+ *  Credential:
+ *      type: object
+ *      required:
+ *          - "name"
+ *          - "major_cred"
+ *          - "created_by"
+ *      properties:
+ *          id:
+ *              type: integer
+ *          name:
+ *              type: string
+ *          abbr:
+ *              type: string
+ *              nullable: true
+ *          major_cred:
+ *              type: boolean
+ *          parent_cred:
+ *              type: integer
+ *              nullable: true
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class Credential extends Model {
 
     /**

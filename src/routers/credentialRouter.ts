@@ -4,6 +4,21 @@ import { Credential } from "../models/credential";
 export const credentialRouter = Router();
 
 // Expects as req.body which confirms to the credential object, else errors out and returns a bad request
+/**
+ * @swagger
+ * /credential/:
+ *  put:
+ *      summary: Create Credential
+ *      description: Create a new credential or sub-credential
+ *      tags:
+ *          - credential
+ *      requestBody:
+ *          description: Credential object
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/Credential'
+ */
 credentialRouter.put("/", async (req: Request, res: Response) => {
     try {
         const insertion = await Credential.transaction(async trx => {
@@ -20,6 +35,15 @@ credentialRouter.put("/", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /credential/:id:
+ *  get:
+ *      summary: Fetch Credential
+ *      description: Get the credential matching `id`
+ *      tags:
+ *          - credential
+ */
 credentialRouter.get("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
@@ -32,6 +56,15 @@ credentialRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /credential/:id:
+ *  delete:
+ *      summary: Remove Credential
+ *      description: Delete the credential matching `id`
+ *      tags:
+ *          - credential
+ */
 credentialRouter.delete("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
@@ -46,6 +79,15 @@ credentialRouter.delete("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /credential/:id:
+ *  post:
+ *      summary: Update Credential
+ *      description: Update the credential matching `id`
+ *      tags:
+ *          - credential
+ */
 credentialRouter.post("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
