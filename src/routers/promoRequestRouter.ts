@@ -4,6 +4,21 @@ import { PromoRequest } from "../models/promoRequest";
 export const promoRequestRouter = Router();
 
 // Expects as req.body which confirms to the PromoRequest object, else errors out and returns a bad request
+/**
+ * @swagger
+ * /promo_request/:
+ *  put:
+ *      summary: Create Promo Req
+ *      description: Create a new promotion request for credential
+ *      tags:
+ *          - promo req
+ *      requestBody:
+ *          description: PromoRequest Object
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/PromoRequest'
+ */
 promoRequestRouter.put("/", async (req: Request, res: Response) => {
     try {
         const insertion = await PromoRequest.transaction(async trx => {
@@ -18,6 +33,16 @@ promoRequestRouter.put("/", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /promo_request/:id:
+ *  get:
+ *      summary: Get promo req
+ *      description: Get the promo request with `id`
+ *      tags:
+ *          - promo req
+ * 
+ */
 promoRequestRouter.get("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
@@ -30,6 +55,15 @@ promoRequestRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /promo_req/:id:
+ *  delete:
+ *      summary: Delete promo req
+ *      description: Delete the promotion request matching `id`
+ *      tags:
+ *          - promo req
+ */
 promoRequestRouter.delete("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
@@ -44,6 +78,15 @@ promoRequestRouter.delete("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /promo_req/:id:
+ *  post:
+ *      summary: Update promo req
+ *      description: Update the promotion request matching `id`
+ *      tags:
+ *          - promo req
+ */
 promoRequestRouter.post("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {

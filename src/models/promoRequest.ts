@@ -2,6 +2,41 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { Credential } from "./credential";
 
+/**
+ * @swagger
+ * definitions:
+ *  PromoRequest:
+ *      type: object
+ *      required:
+ *          - "user_id"
+ *          - "approved"
+ *          - "credential_id"
+ *          - "created_by"
+ *      properties:
+ *          id:
+ *              type: integer
+ *          user_id:
+ *              type: integer
+ *          credential_id:
+ *              type: integer
+ *          approved:
+ *              type: boolean
+ *          comments:
+ *              type: string
+ *              nullable: true
+ *          date:
+ *              type: string
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class PromoRequest extends Model {
 
     /**
