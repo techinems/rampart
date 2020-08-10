@@ -2,6 +2,36 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { Role } from "./role";
 
+/**
+ * @swagger
+ * definitions:
+ *  UserRole:
+ *      type: object
+ *      required:
+ *          - "user_id"
+ *          - "position_id"
+ *          - "created_by"
+ *      properties:
+ *          user_id:
+ *              type: integer
+ *          position_id:
+ *              type: integer
+ *          start_date:
+ *              type: string
+ *          end_date:
+ *              type: string
+ *              nullable: true
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class UserRole extends Model {
 
     /**

@@ -2,6 +2,39 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { Credential } from "./credential";
 
+/**
+ * @swagger
+ * definition:
+ *  EvalItem:
+ *      type: object
+ *      required:
+ *          - "credential_id"
+ *          - "name"
+ *          - "grading_type"
+ *          - "active"
+ *          - "created_by"
+ *      properties:
+ *          id:
+ *              type: integer
+ *          credential_id:
+ *              type: integer
+ *          name:
+ *              type: string
+ *          grading_type:
+ *              type: integer
+ *          active:
+ *              type: boolean
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class EvalItem extends Model {
 
     /**

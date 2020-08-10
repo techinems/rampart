@@ -2,6 +2,37 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { ChecklistItem } from "./checklistItems";
 
+/**
+ * @swagger
+ * definitions:
+ *  UserChecklistItem:
+ *      type: object
+ *      required:
+ *          - "user_id"
+ *          - "checklist_item_id"
+ *          - "trainer_id"
+ *          - "timestamp"
+ *          - "created_by"
+ *      properties:
+ *          user_id:
+ *              type: integer
+ *          checklist_item_id:
+ *              type: integer
+ *          trainer_id:
+ *              type: integer
+ *          timestamp:
+ *              type: string
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class UserChecklistItem extends Model {
 
     /**
@@ -23,7 +54,7 @@ export class UserChecklistItem extends Model {
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["user_id", "checklist_item_id", "trainer_id", "timestamp", "created_by"],
+        required: ["user_id", "checklist_item_id", "trainer_id", "created_by"],
 
         properties: {
             user_id: { type: "integer" },

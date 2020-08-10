@@ -2,6 +2,38 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { EvalItem } from "./evalItem";
 
+/**
+ * @swagger
+ * definitions:
+ *  UserEvalItem:
+ *      tyoe: object
+ *      required:
+ *          - "user_id"
+ *          - "eval_item_id"
+ *          - "created_by"
+ *      properties:
+ *          id:
+ *              type: integer
+ *          user_id:
+ *              type: integer
+ *          eval_item_id:
+ *              type: integer
+ *          eval_num:
+ *              type: integer
+ *          score:
+ *              type: integer
+ *              nullable: true
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class UserEvalItem extends Model {
 
     /**

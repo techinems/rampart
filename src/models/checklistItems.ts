@@ -2,6 +2,36 @@ import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
 import { Credential } from "./credential";
 
+/**
+ * @swagger
+ * definitions:
+ *  ChecklistItem:
+ *      type: object
+ *      required:
+ *          - "credential_id"
+ *          - "text"
+ *          - "active"
+ *          - "created_by"
+ *      properties:
+ *          id:
+ *              type: integer
+ *          credential_id:
+ *              type: integer
+ *          text:
+ *              type: string
+ *          active:
+ *              type: boolean
+ *          created_by:
+ *              type: integer
+ *          created:
+ *              type: string
+ *          updated_by:
+ *              type: integer
+ *              nullable: true
+ *          updated:
+ *              type: string
+ *              nullable: true
+ */
 export class ChecklistItem extends Model {
 
     /**
