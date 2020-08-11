@@ -1,29 +1,24 @@
 import { Model, RelationMappingsThunk, RelationMappings } from "objection";
 import { User } from "./user";
-import { OtherCert } from "./otherCert";
 
 /**
  * @swagger
  * definitions:
- *  UserOtherCert:
+ *  NightCrew:
  *      type: object
  *      required:
- *          - "user_id"
- *          - "other_cert_id"
- *          - "created_by"
+ *          - "date"
  *      properties:
- *          id:
- *              type: integer
- *          user_id:
- *              type: integer
- *          other_cert_id:
- *              type: integer
- *          expiration:
+ *          date:
  *              type: string
- *              nullable: true
- *          scan_filepath:
- *              type: string
- *              nullable: true
+ *          cc:
+ *              type: integer
+ *          driver:
+ *              type: integer
+ *          att1:
+ *              type: integer
+ *          att2:
+ *              type: integer
  *          created_by:
  *              type: integer
  *          created:
@@ -35,36 +30,36 @@ import { OtherCert } from "./otherCert";
  *              type: string
  *              nullable: true
  */
-export class UserOtherCert extends Model {
+export class NightCrew extends Model {
 
     /**
      * The properties in the table
      * Non-null assertion is sadly necessary due to 
      * this class being implicity instantiated which Typescript doesn't see
      */
-    private id!: number;
-    private user!: User;
-    private OtherCert!: OtherCert;
-    private expiration?: string;
-    private scan_filepath?: string;
+    private date!: string;
+    private ccUser?: User;
+    private driverUser?: User;
+    private att1User?: User;
+    private att2User?: User;
     private creator!: User;
     private created!: string;
     private updator?: User;
     private updated?: string;
 
-    static tableName = "users_ems_certs";
+    static tableName = "night_crews";
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["user_id", "other_cert_id", "created_by"],
+        required: ["date", "created_by"],
 
         properties: {
-            id: { type: "integer" },
-            user_id: { type: "integer" },
-            other_cert_id: { type: "integer" },
-            expiration: { type: "string" },
-            scan_filepath: { type: "string" },
+            day: { type: "integer" },
+            cc: { type: "integer" },
+            driver: { type: "integer" },
+            att1: { type: "integer" },
+            att2: { type: "integer" },
             created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
@@ -73,27 +68,43 @@ export class UserOtherCert extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        user: {
+        ccUser: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserOtherCert.tableName}.user_id`,
+                from: `${NightCrew.tableName}.cc`,
                 to: `${User.tableName}.id`
             }
         },
-        emsCert: {
+        driverUser: {
             relation: Model.BelongsToOneRelation,
-            modelClass: OtherCert,
+            modelClass: User,
             join: {
-                from: `${UserOtherCert.tableName}.other_cert_id`,
-                to: `${OtherCert.tableName}.id`
+                from: `${NightCrew.tableName}.driver`,
+                to: `${User.tableName}.id`
+            }
+        },
+        att1User: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: User,
+            join: {
+                from: `${NightCrew.tableName}.att1`,
+                to: `${User.tableName}.id`
+            }
+        },
+        att2User: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: User,
+            join: {
+                from: `${NightCrew.tableName}.att2`,
+                to: `${User.tableName}.id`
             }
         },
         creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserOtherCert.tableName}.created_by`,
+                from: `${NightCrew.tableName}.created_by`,
                 to: `${User.tableName}.id`
             }
         },
@@ -101,7 +112,7 @@ export class UserOtherCert extends Model {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
             join: {
-                from: `${UserOtherCert.tableName}.updated_by`,
+                from: `${NightCrew.tableName}.updated_by`,
                 to: `${User.tableName}.id`
             }
         }
