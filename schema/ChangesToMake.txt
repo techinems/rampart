@@ -4,6 +4,7 @@ User_Credential:
     add "date_demoted" nullable field to account for people loosing credential due to expiration of training ect.
 Credential:
     change "major_cred" to integer fk pointing to the major_cred (moving backwards in promotion steps is hard, promotion is parent cred)
+    add "role" fk to allow for granting of role when credential is given
 User_Eval_Item:
     change "score" to string/text to account for comments/various scoring types
     Possibly add userEvals table and appropriate fk into this to make logic simpiler to list evals.
