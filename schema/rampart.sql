@@ -61,6 +61,10 @@ CREATE TRIGGER "users_autoset_timestamp_cols" BEFORE UPDATE
 ON "users" FOR EACH ROW EXECUTE PROCEDURE
 autoset_update_col();
 
+-- Create first user otherwise we in trouble
+INSERT INTO users (id, first_name, last_name, dob, email, phone, admin, active, access_revoked, created_by)
+    VALUES (0, 'RPI', 'Ambulance', date '1970-01-01', 'admin@rpi.edu', '5189772963', TRUE, TRUE, FALSE, 0);
+
 -- POSITIONS
 CREATE TABLE "positions"
 (

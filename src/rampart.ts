@@ -56,7 +56,7 @@ const port = process.env.RAMPART_PORT;
 const knex = Knex({
     client: "postgres",
     connection: {
-        host: "db",
+        host: process.env.DB_HOST || "db",
         user: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME
