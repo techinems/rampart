@@ -13,3 +13,5 @@ Default Schedule:
     change cc/driver/att1/att2 columns to nullable
 Night_Crews:
     add "in_service" boolean
+Radio_Distribution:
+    change date_in to nullable
