@@ -1093,7 +1093,8 @@ autoset_update_col();
 (
  "user_id"    int NOT NULL,
  "event_id"   int NOT NULL,
- "position"   int NULL,
+ "position_id" int NULL,
+ "hidden"     boolean NOT NULL,
  "created_by" int NOT NULL,
  "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by" int NULL,
@@ -1134,7 +1135,7 @@ CREATE INDEX "fkIdx_72" ON "attendees"
 
 CREATE INDEX "fkIdx_82" ON "attendees"
 (
- "position"
+ "position_id"
 );
 
 CREATE TRIGGER "attendees_autoset_update_col" BEFORE UPDATE

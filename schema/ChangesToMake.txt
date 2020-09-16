@@ -15,3 +15,5 @@ Night_Crews:
     add "in_service" boolean
 Radio_Distribution:
     change date_in to nullable
+Attendees:
+    DONE ~ add "hidden" boolean rather than delete for dropped attendees  
