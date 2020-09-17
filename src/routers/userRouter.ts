@@ -52,9 +52,7 @@ userRouter.put("/", async (req: Request, res: Response) => {
  */
 userRouter.get("/users/", async (req: Request, res: Response) => {
     try {
-        console.log("goodbye");
         const users = await User.query().modify("liteUser");
-        console.log("goodbye");
         res.send(users);
     } catch (err) {
         // If there's not a status code in the error we go with 400
