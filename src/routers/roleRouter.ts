@@ -18,7 +18,7 @@ export const roleRouter = Router();
  *      content:
  *         application/json:
  *           schema:
- *             $ref: '#/definitions/role'
+ *             $ref: '#/definitions/Role'
  *     responses:
  *          400:
  *              description: error

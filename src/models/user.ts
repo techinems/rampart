@@ -3,6 +3,18 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  * @swagger
  *
  * definitions:
+ *   liteUser:
+ *      type: object
+ *      properties:
+ *           id:
+ *             type: "integer"
+ *           first_name:
+ *             type: "string"
+ *           last_name: 
+ *             type: "string"
+ *           nine_hundred:
+ *             type: "integer"
+ *             nullable: true
  *   User:
  *     type: object
  *     required:
@@ -16,11 +28,11 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
   *       - "access_revoked"
   *       - "created_by"
  *     properties:
- *           id: 
+ *           id:
  *             type: "integer"
- *           first_name: 
+ *           first_name:
  *             type: "string"
- *           last_name:  
+ *           last_name: 
  *             type: "string"
  *           nine_hundred:
  *             type: "integer"
@@ -29,10 +41,10 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  *             type: "string"
  *           email:
  *             type: "string"
- *           home_street: 
+ *           home_street:
  *             type: "string"
  *             nullable: true
- *           home_city: 
+ *           home_city:
  *             type: "string"
  *             nullable: true
  *           home_state:
@@ -47,13 +59,13 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  *           local_city:
  *             type: "string"
  *             nullable: true
- *           local_state: 
+ *           local_state:
  *             type: "string"
  *             nullable: true
  *           local_zip:
  *             type: "string"
  *             nullable: true
- *           phone: 
+ *           phone:
  *             type: "string"
  *           rcs_id:
  *             type: "string"
@@ -66,24 +78,24 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  *           last_login:
  *              type: "string"
  *              nullable: true
- *           active: 
+ *           active:
  *              type: "boolean"
  *           access_revoked:
  *              type: "boolean"
- *           g_id: 
+ *           g_id:
  *              type: "string"
  *              nullable: true
  *           slack_id:
  *              type: "string"
  *              nullable: true
- *           created_by: 
+ *           created_by:
  *              type: "integer"
- *           created: 
+ *           created:
  *              type: "string"
- *           updated_by: 
+ *           updated_by:
  *              type: "integer"
  *              nullable: true
- *           updated: 
+ *           updated:
  *              type: "string"
  *              nullable: true
  */

@@ -39,6 +39,32 @@ userRouter.put("/", async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ *  /users:
+ *      get:
+ *          summary: get all users
+ *          tags: 
+ *              - user
+ *          responses:
+ *              200:
+ *                  description: User returned
+ *                  schema:
+ *                      $ref: '#/definitions/liteUser'
+ */
+userRouter.get("/users/", async (req: Request, res: Response) => {
+    try {
+        console.log("goodbye");
+        const users = await User.query().modify("liteUser");
+        console.log("goodbye");
+        res.send(users);
+    } catch (err) {
+        // If there's not a status code in the error we go with 400
+        res.status(err.statusCode ?? 400);
+        res.send(err);
+    }
+});
+
+/**
+ * @swagger
  *  /user/:id:
  *      get:
  *          summary: get a user by id
