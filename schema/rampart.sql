@@ -1104,7 +1104,7 @@ autoset_update_col();
  CONSTRAINT "FK_538" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_69" FOREIGN KEY ( "event_id" ) REFERENCES "events" ( "id" ),
  CONSTRAINT "FK_72" FOREIGN KEY ( "user_id" ) REFERENCES "users" ( "id" ),
- CONSTRAINT "FK_82" FOREIGN KEY ( "position" ) REFERENCES "credentials" ( "id" )
+ CONSTRAINT "FK_82" FOREIGN KEY ( "position_id" ) REFERENCES "credentials" ( "id" )
 );
 
 CREATE UNIQUE INDEX "PK_eventsUsers" ON "attendees"
