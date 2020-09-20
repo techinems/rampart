@@ -37,6 +37,33 @@ credentialRouter.put("/", async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ *  /credentials/:majorcred:
+ *      get:
+ *          summary: get major creds if true, get all credentials if false (must be set)
+ *          tags: 
+ *              - user
+ */
+credentialRouter.get("/credentials/:majorcred", async (req: Request, res: Response) => {
+    const majorcred: string = req.params.majorcred;
+    try {
+        if (majorcred == "true" )
+        {
+            const credential = await Credential.query().where("major_cred", true);
+            res.send(credential);
+        } else {
+            const credential = await Credential.query();
+            res.send(credential);
+        }
+    } catch (err) {
+        // If there's not a status code in the error we go with 400
+        res.status(err.statusCode ?? 400);
+        res.send(err);
+    }
+});
+
+
+/**
+ * @swagger
  * /credential/:id:
  *  get:
  *      summary: Fetch Credential

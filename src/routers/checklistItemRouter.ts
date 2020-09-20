@@ -18,6 +18,19 @@ checklistItemRouter.put("/", async (req: Request, res: Response) => {
     }
 });
 
+checklistItemRouter.get("/credential/:cred_id/:active", async (req: Request, res: Response) => {
+    try {
+        const cred_id: number = parseInt(req.params.cred_id);
+        const act:boolean = (req.params.active == "true");
+        const checklistItem = await ChecklistItem.query().where("credential_id", cred_id).where("active", act).withGraphFetched("credential");
+        res.send(checklistItem);
+    } catch (err) {
+        // If there's not a status code in the error we go with 400
+        res.status(err.statusCode ?? 400);
+        res.send(err);
+    }
+});
+
 checklistItemRouter.get("/:id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.id);

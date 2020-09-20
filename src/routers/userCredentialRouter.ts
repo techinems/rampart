@@ -89,7 +89,7 @@ userCredentialRouter.delete("/:user_id/:cred_id", async (req: Request, res: Resp
     try {
         const user_id: number = parseInt(req.params.user_id);
         const cred_id: number = parseInt(req.params.cred_id);
-        const numDeleted = await UserCredential.query().where("credential_id", cred_id).where("user_id", user_id).delete();
+        const numDeleted = await UserCredential.query().deleteById([user_id, cred_id]);
         res.send({
             numDeleted: numDeleted
         });
@@ -114,7 +114,7 @@ userCredentialRouter.post("/:user_id/:cred_id", async (req: Request, res: Respon
         const user_id: number = parseInt(req.params.user_id);
         const cred_id: number = parseInt(req.params.cred_id);
         // This req.body is a partial user_credential which contains the items which are ready to be updated
-        const credential = await UserCredential.query().where("credential_id", cred_id).where("user_id", user_id).patchAndFetch(req.body);
+        const credential = await UserCredential.query().patchAndFetchById([user_id, cred_id], req.body);
         res.send(credential);
     } catch (err) {
         console.log(err);
