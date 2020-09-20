@@ -4,6 +4,21 @@ import { ChecklistItem } from "../models/checklistItems";
 export const checklistItemRouter = Router();
 
 // Expects as req.body which confirms to the ChecklistItem object, else errors out and returns a bad request
+/**
+ * @swagger
+ * /checklist_item/:
+ *   put:
+ *     summary: Checklist Item
+ *     description:  Create a new checklist item
+ *     tags:
+ *       - checklist items
+ *     requestBody:
+ *      description: ChecklistItem Object
+ *      content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/ChecklistItem'
+ */
 checklistItemRouter.put("/", async (req: Request, res: Response) => {
     try {
         const insertion = await ChecklistItem.transaction(async trx => {
@@ -18,6 +33,15 @@ checklistItemRouter.put("/", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /checklist_item/credential/:cred_id/:active:
+ *   get:
+ *     summary: Checklist by credential
+ *     description:  Get the :active checklist items for :cred_id checklist. :active should be either "true" or "false".
+ *     tags:
+ *       - checklist items
+ */
 checklistItemRouter.get("/credential/:cred_id/:active", async (req: Request, res: Response) => {
     try {
         const cred_id: number = parseInt(req.params.cred_id);
@@ -31,6 +55,16 @@ checklistItemRouter.get("/credential/:cred_id/:active", async (req: Request, res
     }
 });
 
+
+/**
+ * @swagger
+ * /checklist_item/:id:
+ *   get:
+ *     summary: Checklist Item by ID
+ *     description:  Get the checklist item matching :id
+ *     tags:
+ *       - checklist items
+ */
 checklistItemRouter.get("/:id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.id);
@@ -43,6 +77,15 @@ checklistItemRouter.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /checklist_item/:id:
+ *   delete:
+ *     summary: Checklist Item by ID
+ *     description:  Delete the checklist item matching :id
+ *     tags:
+ *       - checklist items
+ */
 checklistItemRouter.delete("/:id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.id);
@@ -57,6 +100,15 @@ checklistItemRouter.delete("/:id", async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /checklist_item/:id:
+ *   post:
+ *     summary: Checklist Item by ID
+ *     description:  Update the checklist item matching :id
+ *     tags:
+ *       - checklist items
+ */
 checklistItemRouter.post("/:id", async (req: Request, res: Response) => {
     try {
         const id: number = parseInt(req.params.id);
