@@ -11,6 +11,7 @@ import { credentialRouter } from "./routers/credentialRouter";
 import { userCredentialRouter } from "./routers/userCredentialRouter";
 import { checklistItemRouter } from "./routers/checklistItemRouter";
 import { promoRequestRouter } from "./routers/promoRequestRouter";
+//import { roleRouter } from "./routers/roleRouter";
 
 // Load our environment variables 
 dotenv.config();
@@ -75,5 +76,6 @@ app.use("/user_credential", userCredentialRouter);
 app.use("/checklist_item", checklistItemRouter);
 app.use("/promo_request", promoRequestRouter);
 app.use("/user", userRouter);
+//app.use("/role", roleRouter);
 
 app.listen(port, () => console.log(`Rampart is listening on PORT: ${port}`));

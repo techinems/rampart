@@ -65,41 +65,6 @@ autoset_update_col();
 INSERT INTO users (id, first_name, last_name, dob, email, phone, admin, active, access_revoked, created_by)
     VALUES (0, 'RPI', 'Ambulance', date '1970-01-01', 'admin@rpi.edu', '5189772963', TRUE, TRUE, FALSE, 0);
 
--- POSITIONS
-CREATE TABLE "positions"
-(
- "id"         serial NOT NULL,
- "name"       text NOT NULL,
- "officer"    boolean NOT NULL,
- "admin"      boolean NOT NULL,
- "created_by" int NOT NULL,
- "created"    timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
- "updated_by" int NULL,
- "updated"    timestamp NULL,
- CONSTRAINT "Ind_580" UNIQUE ( "id" ),
- CONSTRAINT "FK_367" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
- CONSTRAINT "FK_371" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
-);
-
-CREATE UNIQUE INDEX "PK_positions" ON "positions"
-(
- "id"
-);
-
-CREATE INDEX "fkIdx_367" ON "positions"
-(
- "created_by"
-);
-
-CREATE INDEX "fkIdx_371" ON "positions"
-(
- "updated_by"
-);
-
-CREATE TRIGGER "positions_autoset_update_col" BEFORE UPDATE
-ON "positions" FOR EACH ROW EXECUTE PROCEDURE
-autoset_update_col();
-
 -- OTHER_CERTS
 CREATE TABLE "other_certs"
 (
@@ -451,25 +416,114 @@ CREATE TRIGGER "default_schedule_autoset_update_col" BEFORE UPDATE
 ON "default_schedule" FOR EACH ROW EXECUTE PROCEDURE
 autoset_update_col();
 
+-- ROLES
+CREATE TABLE "roles"
+(
+ "id"          serial NOT NULL,
+ "name"        text,
+ "officer"     boolean NOT NULL,
+ "coordinator" boolean NOT NULL,
+ "created_by"  int NULL,
+ "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "updated_by"  int NULL,
+ "updated"     timestamp NULL,
+ CONSTRAINT "Ind_923" UNIQUE ( "id" ),
+ CONSTRAINT "FK_924" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_925" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
+);
+
+CREATE UNIQUE INDEX "PK_roles_c" ON "roles"
+(
+ "id"
+);
+
+CREATE INDEX "fkIdx_924" ON "roles"
+(
+ "created_by"
+);
+
+CREATE INDEX "fkIdx_925" ON "roles"
+(
+ "updated_by"
+);
+
+COMMENT ON COLUMN "roles"."officer" IS 'For showing of officers in tables';
+COMMENT ON COLUMN "roles"."coordinator" IS 'For showing of coordinators in tables';
+
+CREATE TRIGGER "roles_autoset_update_col" BEFORE UPDATE
+ON "roles" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();
+
+-- USERS ROLES
+CREATE TABLE "users_roles"
+(
+ "id"          serial NOT NULL,
+ "role_id"     int NOT NULL,
+ "user_id"     int NOT NULL,
+ "start_date"  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "end_date"    timestamp,
+ "created_by"  int NULL,
+ "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "updated_by"  int NULL,
+ "updated"     timestamp NULL,
+ CONSTRAINT "Ind_926" UNIQUE ( "id" ),
+ CONSTRAINT "FK_927" FOREIGN KEY ("role_id") REFERENCES "roles" ("id"),
+ CONSTRAINT "FK_928" FOREIGN KEY ("user_id") REFERENCES "users" ("id"),
+ CONSTRAINT "FK_929" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_930" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
+);
+
+CREATE UNIQUE INDEX "PK_user_roles_c" ON "users_roles"
+(
+ "id"
+);
+
+CREATE INDEX "fkIdx_927" ON "users_roles"
+(
+ "role_id"
+);
+
+CREATE INDEX "fkIdx_928" ON "users_roles"
+(
+ "user_id"
+);
+
+CREATE INDEX "fkIdx_929" ON "users_roles"
+(
+ "created_by"
+);
+
+CREATE INDEX "fkIdx_930" ON "users_roles"
+(
+ "updated_by"
+);
+
+CREATE TRIGGER "user_roles_autoset_update_col" BEFORE UPDATE
+ON "users_roles" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();
+
 -- CREDENTIALS
 CREATE TABLE "credentials"
 (
  "id"          serial NOT NULL,
  "name"        text NOT NULL,
  "abbr"        text NULL,
- "major_cred"  boolean NOT NULL,
+ "major_cred"  int NULL,
  "parent_cred" int NULL,
+ "role_id"     int NULL,
  "created_by"  int NULL,
  "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  "updated_by"  int NULL,
  "updated"     timestamp NULL,
  CONSTRAINT "Ind_586" UNIQUE ( "id" ),
  CONSTRAINT "FK_223" FOREIGN KEY ( "parent_cred" ) REFERENCES "credentials" ( "id" ),
+ CONSTRAINT "FK_224" FOREIGN KEY ( "major_cred" ) REFERENCES "credentials" ( "id" ),
+ CONSTRAINT "FK_950" FOREIGN KEY ( "role_id" ) REFERENCES "roles" ( "id" ),
  CONSTRAINT "FK_445" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
  CONSTRAINT "FK_449" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
 );
 
-CREATE UNIQUE INDEX "PK_positions_c" ON "credentials"
+CREATE UNIQUE INDEX "PK_credentials_c" ON "credentials"
 (
  "id"
 );
@@ -477,6 +531,16 @@ CREATE UNIQUE INDEX "PK_positions_c" ON "credentials"
 CREATE INDEX "fkIdx_223" ON "credentials"
 (
  "parent_cred"
+);
+
+CREATE INDEX "fkIdx_224" ON "credentials"
+(
+ "major_cred"
+);
+
+CREATE INDEX "fkIdx_950" ON "credentials"
+(
+ "role_id"
 );
 
 CREATE INDEX "fkIdx_445" ON "credentials"
@@ -489,7 +553,7 @@ CREATE INDEX "fkIdx_449" ON "credentials"
  "updated_by"
 );
 
-COMMENT ON COLUMN "credentials"."major_cred" IS 'If false, this will not be shown publicly (e.g. attendant cleared for alphas)';
+COMMENT ON COLUMN "credentials"."major_cred" IS 'If NOT NULL, this will not be shown publicly (e.g. attendant cleared for alphas). Key points to the major cred';
 COMMENT ON COLUMN "credentials"."parent_cred" IS 'This allows us to link credentials together, e.g. P-D --> D --> D-T. Only the highest cred of a particular user in the link of creds will be displayed, and any creds a person has that do not have parentCreds (like FR-CC)';
 
 CREATE TRIGGER "credentials_autoset_update_col" BEFORE UPDATE
@@ -518,54 +582,6 @@ CREATE INDEX "fkIdx_558" ON "audit_log"
 (
  "user_id"
 );
-
--- USERS_POSITIONS
-CREATE TABLE "users_positions"
-(
- "user_id"     int NOT NULL,
- "position_id" int NOT NULL,
- "start_date"  date NOT NULL,
- "end_date"    date NULL,
- "created_by"  int NOT NULL,
- "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
- "updated_by"  int NULL,
- "updated"     timestamp NULL,
- CONSTRAINT "Ind_581" UNIQUE ( "user_id", "position_id" ),
- CONSTRAINT "FK_375" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
- CONSTRAINT "FK_379" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" ),
- CONSTRAINT "FK_49" FOREIGN KEY ( "position_id" ) REFERENCES "positions" ( "id" ),
- CONSTRAINT "FK_52" FOREIGN KEY ( "user_id" ) REFERENCES "users" ( "id" )
-);
-
-CREATE UNIQUE INDEX "PK_usersPositions" ON "users_positions"
-(
- "user_id",
- "position_id"
-);
-
-CREATE INDEX "fkIdx_375" ON "users_positions"
-(
- "created_by"
-);
-
-CREATE INDEX "fkIdx_379" ON "users_positions"
-(
- "updated_by"
-);
-
-CREATE INDEX "fkIdx_49" ON "users_positions"
-(
- "position_id"
-);
-
-CREATE INDEX "fkIdx_52" ON "users_positions"
-(
- "user_id"
-);
-
-CREATE TRIGGER "users_positions_autoset_update_col" BEFORE UPDATE
-ON "users_positions" FOR EACH ROW EXECUTE PROCEDURE
-autoset_update_col();
 
 -- USERS_OTHER_CERTS
 CREATE TABLE "users_other_certs"
@@ -1190,7 +1206,7 @@ CREATE TRIGGER "users_eval_items_autoset_update_col" BEFORE UPDATE
 ON "users_eval_items" FOR EACH ROW EXECUTE PROCEDURE
 autoset_update_col();
 
--- UUSER_CHECKLIST_ITEMS
+-- USER_CHECKLIST_ITEMS
 CREATE TABLE "users_checklist_items"
 (
  "user_id"           int NOT NULL,
@@ -1242,4 +1258,130 @@ CREATE INDEX "fkIdx_465" ON "users_checklist_items"
 
 CREATE TRIGGER "users_checklist_items_autoset_update_col" BEFORE UPDATE
 ON "users_checklist_items" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();
+
+-- PERMISSIONS
+CREATE TABLE "permissions"
+(
+ "id"          serial NOT NULL,
+ "permission"  text NOT NULL,
+ "text"        text NULL,
+ "created_by"  int NULL,
+ "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "updated_by"  int NULL,
+ "updated"     timestamp NULL,
+ CONSTRAINT "Ind_931" UNIQUE ( "id" ),
+ CONSTRAINT "FK_932" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_933" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
+);
+
+CREATE UNIQUE INDEX "PK_permissions_c" ON "permissions"
+(
+ "id"
+);
+
+CREATE INDEX "fkIdx_932" ON "permissions"
+(
+ "created_by"
+);
+
+CREATE INDEX "fkIdx_933" ON "permissions"
+(
+ "updated_by"
+);
+
+CREATE TRIGGER "permissions_autoset_update_col" BEFORE UPDATE
+ON "permissions" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();
+
+-- USERS PERMISSIONS
+CREATE TABLE "users_permissions"
+(
+ "permission_id"     int NOT NULL,
+ "user_id"     int NOT NULL,
+ "created_by"  int NULL,
+ "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "updated_by"  int NULL,
+ "updated"     timestamp NULL,
+ CONSTRAINT "Ind_934" UNIQUE ( "permission_id", "user_id" ),
+ CONSTRAINT "FK_935" FOREIGN KEY ( "permission_id" ) REFERENCES "permissions" ("id"),
+ CONSTRAINT "FK_936" FOREIGN KEY ( "user_id" ) REFERENCES "users" ("id"),
+ CONSTRAINT "FK_937" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_938" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
+);
+
+CREATE UNIQUE INDEX "PK_users_permissions_c" ON "users_permissions"
+(
+ "permission_id",
+ "user_id"
+);
+
+CREATE INDEX "fkIdx_935" ON "users_permissions"
+(
+ "permission_id"
+);
+
+CREATE INDEX "fkIdx_936" ON "users_permissions"
+(
+ "user_id"
+);
+
+CREATE INDEX "fkIdx_937" ON "users_permissions"
+(
+ "created_by"
+);
+
+CREATE INDEX "fkIdx_938" ON "users_permissions"
+(
+ "updated_by"
+);
+
+CREATE TRIGGER "users_permissions_autoset_update_col" BEFORE UPDATE
+ON "users_permissions" FOR EACH ROW EXECUTE PROCEDURE
+autoset_update_col();
+
+-- ROLES PERMISSIONS
+CREATE TABLE "roles_permissions"
+(
+ "permission_id"     int NOT NULL,
+ "role_id"     int NOT NULL,
+ "created_by"  int NULL,
+ "created"     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ "updated_by"  int NULL,
+ "updated"     timestamp NULL,
+ CONSTRAINT "Ind_940" UNIQUE ( "permission_id", "role_id" ),
+ CONSTRAINT "FK_941" FOREIGN KEY ( "permission_id" ) REFERENCES "permissions" ("id"),
+ CONSTRAINT "FK_942" FOREIGN KEY ( "role_id" ) REFERENCES "roles" ("id"),
+ CONSTRAINT "FK_943" FOREIGN KEY ( "created_by" ) REFERENCES "users" ( "id" ),
+ CONSTRAINT "FK_944" FOREIGN KEY ( "updated_by" ) REFERENCES "users" ( "id" )
+);
+
+CREATE UNIQUE INDEX "PK_roles_permissions_c" ON "roles_permissions"
+(
+ "permission_id",
+ "role_id"
+);
+
+CREATE INDEX "fkIdx_941" ON "roles_permissions"
+(
+ "permission_id"
+);
+
+CREATE INDEX "fkIdx_942" ON "roles_permissions"
+(
+ "role_id"
+);
+
+CREATE INDEX "fkIdx_943" ON "roles_permissions"
+(
+ "created_by"
+);
+
+CREATE INDEX "fkIdx_944" ON "roles_permissions"
+(
+ "updated_by"
+);
+
+CREATE TRIGGER "roles_permissions_autoset_update_col" BEFORE UPDATE
+ON "roles_permissions" FOR EACH ROW EXECUTE PROCEDURE
 autoset_update_col();

@@ -19,7 +19,8 @@ import { User } from "./user";
  *              type: string
  *              nullable: true
  *          major_cred:
- *              type: boolean
+ *              type: integer
+ *              nullable: true
  *          parent_cred:
  *              type: integer
  *              nullable: true
@@ -44,7 +45,7 @@ export class Credential extends Model {
     private id!: number;
     private name!: string;
     private abbr?: string;
-    private major_cred!: boolean;
+    private major_credential!: Credential;
     private parent_cred?: Credential;
     private creator!: User;
     private created!: string;
@@ -56,13 +57,13 @@ export class Credential extends Model {
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["name", "major_cred", "created_by"],
+        required: ["name", "created_by"],
 
         properties: {
             id: { type: "integer" },
             name: { type: "string" },
             abbr: { type: ["string", "null"] },
-            major_cred: { type: "boolean" },
+            major_cred: { type: ["integer", "null"] },
             parent_cred: { type: ["integer", "null"] },
             created_by: { type: "integer" },
             created: { type: "string" },
@@ -72,6 +73,14 @@ export class Credential extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
+        major_credential: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: Credential,
+            join: {
+                from: `${Credential.tableName}.major_cred`,
+                to: `${Credential.tableName}.id`
+            }
+        },
         creator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,

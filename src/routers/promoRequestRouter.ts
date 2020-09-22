@@ -91,8 +91,8 @@ promoRequestRouter.post("/:id", async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     try {
         // This req.body is a partial user which contains the items which are ready to be updated
-        const user = await PromoRequest.query().patchAndFetchById(id, req.body);
-        res.send(user);
+        const promoRequest = await PromoRequest.query().patchAndFetchById(id, req.body);
+        res.send(promoRequest);
     } catch (err) {
         console.log(err);
         // If there's not a status code in the error we go with 400

@@ -18,7 +18,7 @@ import { User } from "./user";
  *              nullable: true
  *          officer:
  *              type: boolean
- *          admin:
+ *          coordinator:
  *              type: boolean
  *          created_by:
  *              type: integer
@@ -41,7 +41,7 @@ export class Role extends Model {
     private id!: number;
     private name?: string;
     private officer!: boolean;
-    private admin!: boolean;
+    private coordinator!: boolean;
     // #TODO: add "visable" boolean if necessary
     private creator!: User;
     private created!: string;
@@ -53,13 +53,13 @@ export class Role extends Model {
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["officer", "admin", "created_by"],
+        required: ["officer", "coordinator", "created_by"],
 
         properties: {
             id: { type: "integer" },
             name: { type: ["string", "null"] },
             officer:{ type: "boolean" },
-            admin: { type: "boolean" },
+            coordinator: { type: "boolean" },
             created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
