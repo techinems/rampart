@@ -48,7 +48,8 @@ credentialRouter.get("/credentials/:majorcred", async (req: Request, res: Respon
     try {
         if (majorcred == "true" )
         {
-            const credential = await Credential.query().where("major_cred", true);
+            // if major_cred id is null, it is a major cred.
+            const credential = await Credential.query().where("major_cred", null);
             res.send(credential);
         } else {
             const credential = await Credential.query();

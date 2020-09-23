@@ -45,8 +45,8 @@ export class Credential extends Model {
     private id!: number;
     private name!: string;
     private abbr?: string;
-    private major_credential!: Credential;
-    private parent_cred?: Credential;
+    private major_c?: Credential;
+    private parent_c?: Credential;
     private creator!: User;
     private created!: string;
     private updator?: User;
@@ -73,11 +73,19 @@ export class Credential extends Model {
     }
 
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        major_credential: {
+        major_c: {
             relation: Model.BelongsToOneRelation,
             modelClass: Credential,
             join: {
                 from: `${Credential.tableName}.major_cred`,
+                to: `${Credential.tableName}.id`
+            }
+        },
+        parent_c: {
+            relation: Model.BelongsToOneRelation,
+            modelClass: Credential,
+            join: {
+                from: `${Credential.tableName}.parent_cred`,
                 to: `${Credential.tableName}.id`
             }
         },
