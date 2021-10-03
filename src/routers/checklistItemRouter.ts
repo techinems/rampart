@@ -26,7 +26,7 @@ checklistItemRouter.put("/", async (req: Request, res: Response) => {
             return query;
         });
         res.send(insertion);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -48,7 +48,7 @@ checklistItemRouter.get("/credential/:cred_id/:active", async (req: Request, res
         const act:boolean = (req.params.active == "true");
         const checklistItem = await ChecklistItem.query().where("credential_id", cred_id).where("active", act).withGraphFetched("credential");
         res.send(checklistItem);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -70,7 +70,7 @@ checklistItemRouter.get("/:id", async (req: Request, res: Response) => {
         const id: number = parseInt(req.params.id);
         const checklistItem = await ChecklistItem.query().findById(id).withGraphFetched("credential");
         res.send(checklistItem);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -93,7 +93,7 @@ checklistItemRouter.delete("/:id", async (req: Request, res: Response) => {
         res.send({
             numDeleted: numDeleted
         });
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -115,7 +115,7 @@ checklistItemRouter.post("/:id", async (req: Request, res: Response) => {
         // This req.body is a partial ChecklistItem which contains the items which are ready to be updated
         const checklistItem = await ChecklistItem.query().patchAndFetchById(id, req.body);
         res.send(checklistItem);
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);

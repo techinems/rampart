@@ -26,7 +26,7 @@ credentialRouter.put("/", async (req: Request, res: Response) => {
             return query;
         });
         res.send(insertion);
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.message);
         console.log(err.data);
         // If there's not a status code in the error we go with 400
@@ -55,7 +55,7 @@ credentialRouter.get("/credentials/:majorcred", async (req: Request, res: Respon
             const credential = await Credential.query();
             res.send(credential);
         }
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -77,7 +77,7 @@ credentialRouter.get("/:id", async (req: Request, res: Response) => {
     try {
         const credential = await Credential.query().findById(id);
         res.send(credential);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -100,7 +100,7 @@ credentialRouter.delete("/:id", async (req: Request, res: Response) => {
         res.send({
             numDeleted: numDeleted
         });
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -122,7 +122,7 @@ credentialRouter.post("/:id", async (req: Request, res: Response) => {
         // This req.body is a partial credential which contains the items which are ready to be updated
         const credential = await Credential.query().patchAndFetchById(id, req.body);
         res.send(credential);
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);

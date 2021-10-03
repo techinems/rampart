@@ -30,7 +30,7 @@ roleRouter.put("/", async (req: Request, res: Response) => {
             return query;
         });
         res.send(insertion);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -55,7 +55,7 @@ roleRouter.get("/:id", async (req: Request, res: Response) => {
     try {
         const role = await Role.query().findById(id);
         res.send(role);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -80,7 +80,7 @@ roleRouter.delete("/:id", async (req: Request, res: Response) => {
         res.send({
             numDeleted: numDeleted
         });
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -107,7 +107,7 @@ roleRouter.post("/:id", async (req: Request, res: Response) => {
         // This req.body is a partial role which contains the items which are ready to be updated
         const role = await Role.query().patchAndFetchById(id, req.body);
         res.send(role);
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);

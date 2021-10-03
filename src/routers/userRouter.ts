@@ -30,7 +30,7 @@ userRouter.put("/", async (req: Request, res: Response) => {
             return query;
         });
         res.send(insertion);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -54,7 +54,7 @@ userRouter.get("/users/", async (req: Request, res: Response) => {
     try {
         const users = await User.query().modify("liteUser");
         res.send(users);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -79,7 +79,7 @@ userRouter.get("/:id", async (req: Request, res: Response) => {
     try {
         const user = await User.query().findById(id);
         res.send(user);
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -104,7 +104,7 @@ userRouter.delete("/:id", async (req: Request, res: Response) => {
         res.send({
             numDeleted: numDeleted
         });
-    } catch (err) {
+    } catch (err: any) {
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);
         res.send(err);
@@ -131,7 +131,7 @@ userRouter.post("/:id", async (req: Request, res: Response) => {
         // This req.body is a partial user which contains the items which are ready to be updated
         const user = await User.query().patchAndFetchById(id, req.body);
         res.send(user);
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         // If there's not a status code in the error we go with 400
         res.status(err.statusCode ?? 400);

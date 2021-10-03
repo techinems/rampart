@@ -1,8 +1,7 @@
-import * as express from "express";
+import express from "express";
 import * as dotenv from "dotenv";
-import * as bodyParser from "body-parser";
-import * as swaggerJSDoc from "swagger-jsdoc";
-import * as Knex from "knex";
+import swaggerJSDoc from "swagger-jsdoc";
+import Knex from "knex";
 import { Model } from "objection";
 import { userRouter } from "./routers/userRouter";
 import { jwtRouter } from "./auth/jwtRouter";
@@ -18,7 +17,7 @@ dotenv.config();
 
 
 const app = express();
-app.use(bodyParser.json({
+app.use(express.json({
   strict: false,
 }));
 
