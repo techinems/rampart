@@ -1,4 +1,5 @@
 import  { Response, Request, NextFunction } from "express";
+import { OAuth2Client } from "google-auth-library";
 import * as jwt from "jsonwebtoken";
 
 type JWT = {
@@ -59,4 +60,14 @@ function methodToPermission(method: string): string {
     if (method === "DELETE") return "delete";
     // If it hits this case it means it's a method we don't know
     return "";
+}
+
+
+export async function verifyGoogleToken(token: string): Promise<void> {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const requestVerification = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID
+    });
+    console.log(JSON.stringify(requestVerification.getPayload()));
 }
