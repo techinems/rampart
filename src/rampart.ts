@@ -10,6 +10,7 @@ import { credentialRouter } from "./routers/credentialRouter";
 import { userCredentialRouter } from "./routers/userCredentialRouter";
 import { checklistItemRouter } from "./routers/checklistItemRouter";
 import { promoRequestRouter } from "./routers/promoRequestRouter";
+import { metadataRouter } from "./routers/metadataRouter";
 //import { roleRouter } from "./routers/roleRouter";
 
 // Load our environment variables 
@@ -67,6 +68,9 @@ Model.knex(knex);
 
 app.use("/jwt", jwtRouter);
 app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart endpoint is online and healthy!"));
+
+// This is the only unauthenticated endpoint
+app.use("/metadata", metadataRouter);
 
 // Express middleware order matters, placing it here prevents anything above it from requiring a token
 //app.use(permissionsMiddleware);
