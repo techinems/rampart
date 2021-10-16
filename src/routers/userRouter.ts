@@ -75,9 +75,9 @@ userRouter.get("/users/", async (req: Request, res: Response) => {
  *                      $ref: '#/definitions/User'
  */
 userRouter.get("/:id", async (req: Request, res: Response) => {
-    const id: number = parseInt(req.params.id);
+    const id = req.params.id;
     try {
-        const user = await User.query().findById(id);
+        const user = (await User.query().where('id', id).orWhere('g_id', id))[0];
         res.send(user);
     } catch (err: any) {
         // If there's not a status code in the error we go with 400

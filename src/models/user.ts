@@ -1,4 +1,4 @@
-import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modifiers } from "objection";
+import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modifiers, ModelObject } from "objection";
 /**
  * @swagger
  *
@@ -26,7 +26,7 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
   *       - "admin"
   *       - "active"
   *       - "access_revoked"
-  *       - "created_by"
+  *       - "g_id"
  *     properties:
  *           id:
  *             type: "integer"
@@ -84,12 +84,10 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  *              type: "boolean"
  *           g_id:
  *              type: "string"
- *              nullable: true
+ *              nullable: false
  *           slack_id:
  *              type: "string"
  *              nullable: true
- *           created_by:
- *              type: "integer"
  *           created:
  *              type: "string"
  *           updated_by:
@@ -100,40 +98,40 @@ import { Model, RelationMappings, RelationMappingsThunk, QueryBuilderType, Modif
  *              nullable: true
  */
 export class User extends Model {
-    private id!: number;
-    private first_name!: string;
-    private last_name!: string;
-    private nine_hundred?: number;
-    private dob!: string;
-    private email!: string;
-    private home_street?: string;
-    private home_city?: string;
-    private home_state?: string;
-    private home_zip?: string;
-    private local_street?: string;
-    private local_city?: string;
-    private local_state?: string;
-    private local_zip?: string;
-    private phone!: string;
-    private rcs_id?: string;
-    private rin?: number;
-    private admin!: boolean;
-    private last_login?: string;
-    private active!: boolean;
-    private access_revoked!: boolean;
-    private g_id?: string;
-    private slack_id?: string;
-    private creator!: User;
-    private created!: string;
-    private updator?: User;
-    private updated?: string;
+    public id!: number;
+    public first_name!: string;
+    public last_name!: string;
+    public nine_hundred?: number;
+    public dob!: string;
+    public email!: string;
+    public home_street?: string;
+    public home_city?: string;
+    public home_state?: string;
+    public home_zip?: string;
+    public local_street?: string;
+    public local_city?: string;
+    public local_state?: string;
+    public local_zip?: string;
+    public phone!: string;
+    public rcs_id?: string;
+    public rin?: number;
+    public admin!: boolean;
+    public last_login?: string;
+    public active!: boolean;
+    public access_revoked!: boolean;
+    public g_id!: string;
+    public slack_id?: string;
+    public creator!: User;
+    public created!: string;
+    public updator?: User;
+    public updated?: string;
 
     static tableName = "users";
 
     // Used for validation, whenever a model is created it checks this
     static jsonSchema = {
         type: "object",
-        required: ["first_name", "last_name", "dob", "email", "phone", "admin", "active", "access_revoked", "created_by"],
+        required: ["first_name", "last_name", "dob", "email", "phone", "admin", "active", "access_revoked", "g_id"],
 
         properties: {
             id: { type: "integer" },
@@ -157,9 +155,8 @@ export class User extends Model {
             last_login: { type: ["string", "null"] },
             active: { type: "boolean" },
             access_revoked: { type: "boolean" },
-            g_id: { type: ["string", "null"] },
+            g_id: { type: "string" },
             slack_id: { type: ["string", "null"] },
-            created_by: { type: "integer" },
             created: { type: "string" },
             updated_by: { type: ["integer", "null"] },
             updated: { type: ["string", "null"] } 
@@ -169,14 +166,6 @@ export class User extends Model {
     // This object defines the relations to other models. The relationMappings
     // property can be a thunk to prevent circular dependencies.
     static relationMappings: RelationMappingsThunk = (): RelationMappings => ({
-        creator: {
-            relation: Model.BelongsToOneRelation,
-            modelClass: User,
-            join: {
-                from: `${User.tableName}.created_by`,
-                to: `${User.tableName}.id`
-            }
-        },
         updator: {
             relation: Model.BelongsToOneRelation,
             modelClass: User,
@@ -194,3 +183,5 @@ export class User extends Model {
         }
     }
 }
+
+export type UserShape = ModelObject<User>;

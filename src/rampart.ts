@@ -69,7 +69,7 @@ app.use("/jwt", jwtRouter);
 app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart endpoint is online and healthy!"));
 
 // Express middleware order matters, placing it here prevents anything above it from requiring a token
-app.use(permissionsMiddleware);
+//app.use(permissionsMiddleware);
 app.use("/credential", credentialRouter);
 app.use("/user_credential", userCredentialRouter);
 app.use("/checklist_item", checklistItemRouter);

@@ -3,19 +3,28 @@ import * as jwt from "jsonwebtoken";
 
 export const jwtRouter = express.Router();
 
-jwtRouter.get("/issue", (_: express.Request, res: express.Response) => {
-    if (process.env.JWT_SECRET === undefined) {
-        res.status(503);
-        res.send({
-            errorMessage: "JWT Secret not specified as environment variable!"
-        });
+jwtRouter.post("/issue", (req: express.Request, res: express.Response) => {
+    if (!process.env.JWT_SECRET) {
+        res.status(503).send({ error: "NO JWT_SECRET SET!" });
         return;
     }
-    // Hard-coded all permissions for now, but we would fetch what permissions the machine ID has
+    const googleId: string | undefined = req.body.googleID;
+    if (googleId && typeof googleId !== 'string') {
+        res.status(503).send({ error: "Malformed GOOGLE_ID" });
+        return;
+    }
+
+    // Issue a token with the users google id.
+    // If no google id is provided we assume it is a service and therefore give an all access token (may want permissions later)
     const token = jwt.sign({
-       permissions: ["*"] 
-    }, process.env.JWT_SECRET, {
-        expiresIn: "1d"
-    });
-    res.send(token);
+        googleId,
+        isService: googleId === undefined
+    },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" });
+    res.send({ token });
+});
+
+jwtRouter.get("/test", (req, res) => {
+    res.send(JSON.stringify(req.headers));
 });
