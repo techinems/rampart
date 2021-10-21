@@ -3,40 +3,6 @@ import { User } from "../models/user";
 
 export const userRouter = Router();
 
-
-// Expects as req.body which confirms to the user object, else errors out and returns a bad request
-/**
- * @swagger
- * /user/:
- *   put:
- *     summary: Add user
- *     description: Add a user
- *     tags:
- *       - user
- *     requestBody:
- *      description: user object 
- *      content:
- *         application/json:
- *           schema:
- *             $ref: '#/definitions/User'
- *     responses:
- *          400:
- *              description: error
- */
-userRouter.put("/", async (req: Request, res: Response) => {
-    try {
-        const insertion = await User.transaction(async trx => {
-            const query = await User.query(trx).insert(req.body as User);
-            return query;
-        });
-        res.send(insertion);
-    } catch (err: any) {
-        // If there's not a status code in the error we go with 400
-        res.status(err.statusCode ?? 400);
-        res.send(err);
-    }
-});
-
 /**
  * @swagger
  *  /users:

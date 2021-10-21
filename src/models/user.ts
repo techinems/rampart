@@ -114,7 +114,7 @@ export class User extends Model {
     public local_zip?: string;
     public phone!: string;
     public rcs_id?: string;
-    public rin?: number;
+    public rin?: string;
     public admin!: boolean;
     public last_login?: string;
     public active!: boolean;
@@ -150,7 +150,7 @@ export class User extends Model {
             local_zip: { type: ["string", "null"] },
             phone: { type: "string" },
             rcs_id: { type: ["string", "null"] },
-            rin: { type: ["integer", "null"] },
+            rin: { type: ["string", "null"] },
             admin: { type: "boolean" },
             last_login: { type: ["string", "null"] },
             active: { type: "boolean" },
