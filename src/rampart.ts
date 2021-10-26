@@ -5,12 +5,12 @@ import Knex from "knex";
 import { Model } from "objection";
 import { userRouter } from "./routers/userRouter";
 import { jwtRouter } from "./auth/jwtRouter";
-import { permissionsMiddleware } from "./auth/tokenVerify";
 import { credentialRouter } from "./routers/credentialRouter";
 import { userCredentialRouter } from "./routers/userCredentialRouter";
 import { checklistItemRouter } from "./routers/checklistItemRouter";
 import { promoRequestRouter } from "./routers/promoRequestRouter";
 import { metadataRouter } from "./routers/metadataRouter";
+import { tokenMiddleWare } from "./auth/tokenVerify";
 //import { roleRouter } from "./routers/roleRouter";
 
 // Load our environment variables 
@@ -73,7 +73,7 @@ app.get("/", (req: express.Request, res: express.Response) => res.send("Rampart 
 app.use("/metadata", metadataRouter);
 
 // Express middleware order matters, placing it here prevents anything above it from requiring a token
-//app.use(permissionsMiddleware);
+app.use(tokenMiddleWare);
 app.use("/credential", credentialRouter);
 app.use("/user_credential", userCredentialRouter);
 app.use("/checklist_item", checklistItemRouter);

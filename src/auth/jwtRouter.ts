@@ -4,11 +4,20 @@ import * as jwt from "jsonwebtoken";
 export const jwtRouter = express.Router();
 
 jwtRouter.post("/issue", (req: express.Request, res: express.Response) => {
-    if (!process.env.JWT_SECRET) {
-        res.status(503).send({ error: "NO JWT_SECRET SET!" });
+    if (!process.env.JWT_SECRET || !process.env.DB_PASSWORD) {
+        res.status(503).send({ error: "Secrets needed to issue token are not set" });
         return;
     }
-    const googleId: string | undefined = req.body.googleID;
+
+    // Make sure an authorized service is asking for a token
+    // TODO @lramos15 Make this a middleware as we shouldn't have this duplicated in places
+    const serviceSecret = req.headers['service-secret'];
+    if (serviceSecret !== process.env.JWT_SECRET) {
+      res.status(503).send({ success: false, error: "Invalid service secret" });
+      return;
+    }
+
+    const googleId: string | undefined = req.body.googleId;
     if (googleId && typeof googleId !== 'string') {
         res.status(503).send({ error: "Malformed GOOGLE_ID" });
         return;
@@ -20,11 +29,7 @@ jwtRouter.post("/issue", (req: express.Request, res: express.Response) => {
         googleId,
         isService: googleId === undefined
     },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET + process.env.DB_PASSWORD,
         { expiresIn: "1d" });
     res.send({ token });
-});
-
-jwtRouter.get("/test", (req, res) => {
-    res.send(JSON.stringify(req.headers));
 });

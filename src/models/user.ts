@@ -179,7 +179,7 @@ export class User extends Model {
     static modifiers: Modifiers = {
         // This is normally the info we want so we can pass this modifer in to modify the query
         liteUser(query: QueryBuilderType<User>): void {
-            query.select("id", "first_name", "last_name", "nine_hundred");
+            query.select("id", "first_name", "last_name", "nine_hundred", "admin", "active");
         }
     }
 }
