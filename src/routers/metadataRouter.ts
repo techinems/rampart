@@ -50,6 +50,7 @@ metadataRouter.put("/createUser", async (req: Request, res: Response) => {
       res.status(503).send({ success: false, error: "Invalid service secret" });
       return;
     }
+    // TODO @lramos15 Ensure that the google id passed to this function is authed with a known google client id to prevent people from making unauthorized accounts
     const insertion = await User.transaction(async trx => {
       try {
         // Mix-in some of the required properties for the insertion

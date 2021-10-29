@@ -1,5 +1,7 @@
 import { Router, Request, Response } from "express";
+import { getParsedToken, RampartToken } from "../auth/tokenVerify";
 import { User } from "../models/user";
+import { getUser, isAdmin, isSelf } from "../util/user";
 
 export const userRouter = Router();
 
@@ -42,13 +44,17 @@ userRouter.get("/users/", async (req: Request, res: Response) => {
  */
 userRouter.get("/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
+    const rampartToken: RampartToken = getParsedToken(req);
     try {
-        const user = (await User.query().where('id', id).orWhere('g_id', id))[0];
-        res.send(user);
+        if ((await isSelf(id, rampartToken)) || (await isAdmin(rampartToken))) {
+            const user = await getUser(id);
+            res.send(user);
+            return;
+        }
+        res.status(403).send({ error: "Insufficient permissions for this endpoint" });
     } catch (err: any) {
         // If there's not a status code in the error we go with 400
-        res.status(err.statusCode ?? 400);
-        res.send(err);
+        res.status(err.statusCode ?? 400).send(err);
     }
 });
 
